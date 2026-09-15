@@ -25,29 +25,56 @@
   .grain{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.16;mix-blend-mode:overlay}
 
   /* ---------- hero ---------- */
+  /* The kit's own slop_tells gate names an indigo-purple gradient as the number
+     one machine-generated tell, and this page was wearing one. The accent is a
+     warm orange instead, measured against the canvas rather than chosen by eye:
+     #ff8a3d reads 8.50:1 on #08090a, and the filled button puts near-black ink
+     on #f97316 at 7.02:1 rather than white at 2.9:1. */
+  :root{--acc:#ff8a3d;--acc-fill:#f97316;--acc-ink:#0b0b0c;
+    --acc-glow:rgba(249,115,22,0.42);--acc-edge:#ffae7a}
   .hero{position:relative;min-block-size:min(100svh,52rem);display:grid;align-items:center;
-    padding-block:var(--space-24) var(--space-20);overflow:hidden;--edge:#8ea0ff}
+    padding-block:var(--space-20) var(--space-16);overflow:hidden;--edge:var(--acc-edge)}
   @media (max-width:60rem){.hero{padding-block:var(--space-16) var(--space-12);min-block-size:auto}}
   .topo{position:absolute;inset:0;inline-size:100%;block-size:100%;pointer-events:none}
   .hero::after{content:"";position:absolute;inset-block-start:-20%;inset-inline-start:50%;translate:-50% 0;
     inline-size:min(80rem,150%);block-size:50rem;pointer-events:none;
-    background:radial-gradient(closest-side,var(--lin-glow-a),transparent 72%);opacity:.45;filter:blur(var(--blur-glow))}
+    background:radial-gradient(closest-side,var(--acc-glow),transparent 72%);opacity:.38;filter:blur(var(--blur-glow))}
   .hero .wrap{position:relative;z-index:1}
-  h1{font-size:clamp(3rem,11vw,9rem);line-height:.86;letter-spacing:-0.055em;font-weight:700;
-    margin-block:var(--space-6) var(--space-6);max-inline-size:13ch;color:var(--lin-ink)}
+  /* The whole claim of this page is "look at the screens", and the screens used
+     to start 900px below the fold behind a headline the height of the viewport.
+     One is in the hero now, and the headline is sized to leave room for it. */
+  .heroGrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+    gap:var(--space-10);align-items:center}
+  @media (max-width:70rem){.heroGrid{grid-template-columns:minmax(0,1fr);gap:var(--space-8)}}
+  .heroShot{position:relative;min-inline-size:0}
+  .heroShot .slide{flex:none;inline-size:100%}
+  @media (min-width:70rem){.heroShot{margin-inline-end:calc(var(--space-16) * -1)}}
+  h1{font-size:clamp(2.75rem,6.5vw,5rem);line-height:.92;letter-spacing:-0.045em;font-weight:700;
+    margin-block:var(--space-5) var(--space-5);max-inline-size:14ch;color:var(--lin-ink)}
   /* Gradient-clipped text was the first idea and the contrast gate was right to
      refuse it: the computed colour is transparent, so nothing can be measured,
      and where background-clip is unsupported the headline disappears entirely.
      The gradient lives on the backdrop instead, where it costs nobody a word. */
   .lede{font-size:clamp(1rem,1.6vw,1.375rem);color:var(--lin-ink-2);max-inline-size:48ch}
   .cta{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-block-start:var(--space-8)}
+  /* Five numbers spelled out inside one paragraph cannot be scanned. */
+  .facts{display:flex;flex-wrap:wrap;gap:var(--space-5) var(--space-8);margin-block-start:var(--space-8);
+    padding-block-start:var(--space-6);border-block-start:1px solid var(--lin-hairline)}
+  /* Each cell has to size to its LABEL, not its number: min-inline-size:0 let the
+     box shrink to the digits and the words ran into each other. Same mistake as
+     the social card's stat row. */
+  .facts div{flex:none}
+  .facts b{display:block;font-size:var(--text-2xl);font-weight:700;letter-spacing:-0.03em;
+    line-height:1;font-variant-numeric:tabular-nums;color:var(--acc)}
+  .facts span{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--lin-ink-3);margin-block-start:var(--space-2)}
   .btn{display:inline-flex;align-items:center;gap:var(--space-2);min-block-size:3rem;padding-inline:var(--space-6);
     border-radius:var(--radius-pill);text-decoration:none;font:600 var(--text-base)/1 var(--font-sans);
     transition:translate var(--transition-micro),background var(--transition-micro)}
   .btn:hover{translate:0 calc(var(--space-1) * -0.5)}
-  .btn:focus-visible{outline:var(--ring-w) solid var(--lin-accent);outline-offset:var(--space-1)}
-  .btn-solid{background:var(--lin-accent-bg);color:var(--lin-ink)}
-  .btn-solid:hover{background:var(--lin-accent-hover);color:var(--lin-canvas)}
+  .btn:focus-visible{outline:var(--ring-w) solid var(--acc);outline-offset:var(--space-1)}
+  .btn-solid{background:var(--acc-fill);color:var(--acc-ink);font-weight:600}
+  .btn-solid:hover{background:var(--acc);color:var(--acc-ink)}
   .btn-glass{background:var(--lin-raised);border:1px solid var(--lin-hairline);color:var(--lin-ink);
     backdrop-filter:blur(var(--blur-sm))}
   .btn-glass:hover{background:var(--lin-raised-2)}
@@ -100,7 +127,7 @@
   .counts{padding-block:var(--space-20);border-block-start:1px solid var(--lin-hairline)}
   .counts .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr));gap:var(--space-8)}
   .counts b{display:block;font-size:clamp(2.5rem,6vw,4.5rem);line-height:1;font-weight:700;letter-spacing:-0.05em;
-    font-variant-numeric:tabular-nums;color:var(--lin-accent-hover)}
+    font-variant-numeric:tabular-nums;color:var(--acc)}
   .counts span{display:block;margin-block-start:var(--space-3);font-size:var(--text-sm);color:var(--lin-ink-3)}
 
   /* ---------- tilt cards ---------- */
@@ -113,8 +140,8 @@
     border:1px solid var(--lin-hairline);background:var(--lin-panel);
     transition:transform var(--duration-normal) var(--ease-out),border-color var(--transition-micro);
     transform-style:preserve-3d}
-  .card:hover{border-color:var(--lin-accent)}
-  .card:focus-visible{outline:var(--ring-w) solid var(--lin-accent);outline-offset:var(--space-1)}
+  .card:hover{border-color:var(--acc)}
+  .card:focus-visible{outline:var(--ring-w) solid var(--acc);outline-offset:var(--space-1)}
   .card .body{padding:var(--space-5)}
   .card strong{display:block;font-size:var(--text-lg);letter-spacing:-0.01em}
   .card span{display:block;color:var(--lin-ink-3);font-size:var(--text-sm);margin-block-start:var(--space-2)}
@@ -123,8 +150,8 @@
   .rest a{display:inline-flex;align-items:center;min-block-size:2.5rem;padding-inline:var(--space-4);
     border:1px solid var(--lin-hairline);border-radius:var(--radius-pill);text-decoration:none;
     font-size:var(--text-sm);color:var(--lin-ink-2);transition:border-color var(--transition-micro),color var(--transition-micro)}
-  .rest a:hover{border-color:var(--lin-accent);color:var(--lin-ink)}
-  .rest a:focus-visible{outline:var(--ring-w) solid var(--lin-accent);outline-offset:var(--space-1)}
+  .rest a:hover{border-color:var(--acc);color:var(--lin-ink)}
+  .rest a:focus-visible{outline:var(--ring-w) solid var(--acc);outline-offset:var(--space-1)}
 
   /* ---------- closing ---------- */
   .close{padding-block:var(--space-24);border-block-start:1px solid var(--lin-hairline);text-align:center}
@@ -181,16 +208,36 @@
       <polyline points="0,684.6 40,692.4 80,700.3 120,707.6 160,714.1 200,719.5 240,723.8 280,727.1 320,729.9 360,732.5 400,735.2 440,738.3 480,741.7 520,745.3 560,748.7 600,751.4 640,752.8 680,752.5 720,750.4 760,746.2 800,740.3 840,733.0 880,724.9 920,716.8 960,709.1 1000,702.3 1040,696.7 1080,692.4 1120,689.2 1160,686.7 1200,684.5 1240,682.4 1280,680.0 1320,677.3 1360,674.4 1400,671.7 1440,669.6" fill="none" stroke="var(--edge)" stroke-width="1" opacity="0.070"/>
   </svg>
   <div class="wrap">
-    <p class="kicker rise">ux-ui-agent-skills</p>
-    <h1 class="rise">Screens an agent built.</h1>
-    <p class="lede rise">A trading terminal with ten chart types. Twenty whole
-      product screens. Twenty-three component harnesses. Every one of them rendered from
-      one token system and signed off by forty-three objective checks, in light and
-      in dark.</p>
-    <div class="cta rise">
-      <a class="btn btn-solid" href="./terminal/index.html">Open the terminal
-        <svg class="ico" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
-      <a class="btn btn-glass" href="https://github.com/plugin87/ux-ui-agent-skills">Get the kit</a>
+    <div class="heroGrid">
+      <div>
+        <p class="kicker rise">ux-ui-agent-skills</p>
+        <h1 class="rise">Screens an agent built.</h1>
+        <p class="lede rise">A design-system kit for Claude Code. Whole product
+          screens, not component sheets - every one rendered from a single token
+          theme and signed off by a real gate, in light and in dark.</p>
+        <div class="cta rise">
+          <a class="btn btn-solid" href="https://github.com/plugin87/ux-ui-agent-skills">Get the kit
+            <svg class="ico" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+          <a class="btn btn-glass" href="#work">See the twenty screens</a>
+        </div>
+        <div class="facts rise">
+          <div><b>20</b><span>product screens</span></div>
+          <div><b>43</b><span>objective checks</span></div>
+          <div><b>138</b><span>design systems</span></div>
+          <div><b>0</b><span>chart libraries</span></div>
+        </div>
+      </div>
+      <div class="heroShot rise">
+        <figure class="slide" style="margin:0">
+          <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <b>Meridian Terminal</b><em>gated, light and dark</em></div>
+          <div class="shot">
+            <a href="./terminal/index.html"><img src="./thumbs/terminal-thumb.png" width="1200" height="720"
+              decoding="async" alt="Meridian Terminal: a candlestick chart with volume and a moving average, an order book with depth bars, a market depth curve, a time and sales tape and a watchlist" /></a>
+            <figcaption>Ten chart types on one screen, every one inline SVG</figcaption>
+          </div>
+        </figure>
+      </div>
     </div>
   </div>
 </header>
@@ -250,7 +297,7 @@
   </div>
 </section>
 
-<section class="work">
+<section class="work" id="work">
   <div class="wrap">
     <p class="kicker rise">Twenty screens</p>
     <h2 class="rise">Whole screens, not component sheets.</h2>
