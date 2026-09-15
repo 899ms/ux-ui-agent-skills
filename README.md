@@ -11,6 +11,12 @@ A comprehensive kit of structured instructions, design tokens, runnable skills, 
 <img src=".github/images/hero.png" alt="UX/UI Agent Skills — a CLAUDE.md brief beside the capabilities it turns on: design tokens, component specs, WCAG 2.2 and ARIA, code generation, design review, workflows" width="900">
 
 <br>
+<br>
+
+<a href="https://trendshift.io/repositories/24406" target="_blank"><img src="https://trendshift.io/api/badge/repositories/24406" alt="plugin87/ux-ui-agent-skills | Trendshift" width="250" height="55"></a>
+
+<br>
+<br>
 
 [![Version](https://img.shields.io/badge/version-2.10.0-6366f1?style=for-the-badge)](https://github.com/plugin87/ux-ui-agent-skills/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](#license)
@@ -22,7 +28,7 @@ A comprehensive kit of structured instructions, design tokens, runnable skills, 
 [![npm downloads](https://img.shields.io/npm/dt/ux-ui-agent-skills?style=flat-square&logo=npm&logoColor=white&color=cb3837)](https://www.npmjs.com/package/ux-ui-agent-skills)
 ![Tokens](https://img.shields.io/badge/Design_Tokens-DTCG-fbbf24?style=flat-square)
 ![Skills](https://img.shields.io/badge/runnable_skills-19-14b8a6?style=flat-square)
-![Gates](https://img.shields.io/badge/objective_gates-41-16a34a?style=flat-square)
+![Gates](https://img.shields.io/badge/objective_gates-42-16a34a?style=flat-square)
 [![Live demo](https://img.shields.io/badge/live_demo-open-0ea5e9?style=flat-square)](https://plugin87.github.io/ux-ui-agent-skills/)
 ![Design Systems](https://img.shields.io/badge/design_systems-138-f97316?style=flat-square)
 ![Frameworks](https://img.shields.io/badge/frameworks-any-8b5cf6?style=flat-square)
@@ -42,7 +48,7 @@ A comprehensive kit of structured instructions, design tokens, runnable skills, 
 
 
 Not a mockup. These are screenshots of the files in `examples/`, taken by
-`node scripts/screenshot_docs.mjs` from the same HTML the 41 gates measure — so
+`node scripts/screenshot_docs.mjs` from the same HTML the 42 gates measure — so
 what you see below is what the gate run passed, in both themes.
 
 **Click through them yourself: [plugin87.github.io/ux-ui-agent-skills](https://plugin87.github.io/ux-ui-agent-skills/)**
