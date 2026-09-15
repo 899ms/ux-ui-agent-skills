@@ -94,7 +94,9 @@ hand:
 
 ## 6. The traps that only appear when you measure
 
-Every one of these was found by a gate on a screen that looked finished:
+Every one of these was found on a screen that looked finished. The first group a
+gate caught; the ones marked "no gate sees it" were caught by opening the
+screenshot and looking, which is why that step is not optional:
 
 - **A chart palette is not a text palette.** White initials on `--color-chart-4`
   measured **2.65:1** in dark. Chart colours are tuned for large filled shapes.
@@ -113,6 +115,25 @@ Every one of these was found by a gate on a screen that looked finished:
   inputs end up different heights. Set `align-content: start` on the field and an
   explicit `block-size` on the control. Measure the heights in the render - the
   difference is obvious in a screenshot and invisible in the markup.
+- **The same stretch hits whole panels, and no gate sees it.** A row is as tall as
+  its tallest panel, and the short one packs its content to the top and ends in a
+  bordered void - a heatmap panel with 130px of nothing under the caption, a right
+  column that stops two panels short of the map beside it. Every panel in a row
+  has to say which it is: one child absorbs the slack
+  (`grid-template-rows:auto minmax(0,1fr)`, and that child's own tracks go
+  `minmax(<min>,1fr)` so its rows grow too), or the rows share it out
+  (`align-content:space-between`), or the short column earns another panel.
+  Screenshot the row and look at the bottom edge of each panel; this never shows
+  up in the markup.
+- **`auto-fit` silently drops a column, and no gate sees it.** Three gauges in a
+  panel about 340px wide with `minmax(min(100%,7rem),1fr)` resolved to two tracks
+  and orphaned the third beside an empty cell. When the count is fixed and
+  meaningful, write `repeat(3,minmax(0,1fr))` and give narrow widths their own rule.
+- **A category chart needs its categories on the page, and no gate sees it.** A
+  Pareto of five defect types whose names live only in the `aria-label` is a row
+  of anonymous bars to everyone looking at it. Put the labels under the bars -
+  lay the plot out on an even pitch inside its viewBox so a matching grid of
+  labels lines up without a second coordinate system.
 - **An `.sr-only` needs a positioned ancestor.** Inside a scroller it otherwise
   resolves against the initial containing block, lands outside the viewport, and
   inflates the document's scroll width by hundreds of pixels.

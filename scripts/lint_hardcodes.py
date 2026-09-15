@@ -50,7 +50,36 @@ def iter_files(paths, exts):
             yield pp
 
 
-def lint_line(line, tailwind=True):
+def strip_block_comment(line, in_comment):
+    """Return (code outside /* */, whether the comment is still open).
+
+    A single-line comment was already skipped by its leading `/*`, but the middle
+    of a multi-line one is not indented that way — the line explaining that six
+    rotated faders "pushed the page 388px sideways" read as a hardcoded length.
+    Prose about a bug is not the bug."""
+    out, i = [], 0
+    while i < len(line):
+        if in_comment:
+            end = line.find("*/", i)
+            if end == -1:
+                return "".join(out), True
+            i, in_comment = end + 2, False
+        else:
+            start = line.find("/*", i)
+            if start == -1:
+                out.append(line[i:])
+                return "".join(out), False
+            out.append(line[i:start])
+            i, in_comment = start + 2, True
+    return "".join(out), in_comment
+
+
+def lint_line(line, tailwind=True, css_scope=True):
+    """css_scope=False means the line is markup or prose, not CSS.
+
+    A wait time in a table cell ("8m 04s") is content, not style. Flagging it
+    taught nobody anything and invited a fake exception comment, which is worse
+    than the warning."""
     if ALLOW in line or TOKEN_CTX.search(line):
         return []
     stripped = line.strip()
@@ -62,7 +91,7 @@ def lint_line(line, tailwind=True):
     media_cond = "@media" in line or "@container" in line
     for m in HEX.finditer(line):
         hits.append(("hex", m.group(0)))
-    if not media_cond:
+    if not media_cond and css_scope:
         for m in PX.finditer(line):
             if m.group(0) not in PX_OK:
                 hits.append(("px", m.group(0)))
@@ -112,16 +141,41 @@ def main(argv):
         except (UnicodeDecodeError, OSError):
             continue
         in_allow = False
-        for n, line in enumerate(text.splitlines(), 1):
-            if "ds-allow-hardcode:start" in line:
+        markup = f.suffix.lower() in {".html", ".htm", ".vue", ".svelte", ".astro"}
+        in_style = False
+        in_comment = False
+        for n, raw in enumerate(text.splitlines(), 1):
+            # Every marker is read off the RAW line: an exception is itself written
+            # as a comment, so stripping comments first would silently revoke it.
+            if "ds-allow-hardcode:start" in raw:
                 in_allow = True
                 continue
-            if "ds-allow-hardcode:end" in line:
+            if "ds-allow-hardcode:end" in raw:
                 in_allow = False
                 continue
-            if in_allow:
+            if in_allow or ALLOW in raw:
                 continue
-            for kind, val in lint_line(line, tailwind):
+            # In an HTML file px/ms only mean something inside <style> or a style
+            # attribute. Everywhere else they are words on the page: a wait time
+            # in a table cell is content, not drift.
+            if markup:
+                low = raw.lower()
+                opens = "<style" in low
+                closes = "</style>" in low
+                css_here = in_style or opens or "style=" in low
+                if opens and not closes:
+                    in_style = True
+                if closes:
+                    in_style = False
+            else:
+                css_here = True
+            # Only CSS has /* */. Tracking it in page text would let a literal
+            # "/*" in a code sample swallow every line after it.
+            if css_here:
+                line, in_comment = strip_block_comment(raw, in_comment)
+            else:
+                line, in_comment = raw, False
+            for kind, val in lint_line(line, tailwind, css_here):
                 print(f"{f}:{n}: hardcoded {kind} '{val}' — use a token")
                 violations += 1
 

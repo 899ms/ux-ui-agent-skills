@@ -46,8 +46,8 @@ Not a mockup. These are screenshots of the files in `examples/`, taken by
 what you see below is what the gate run passed, in both themes.
 
 **Click through them yourself: [plugin87.github.io/ux-ui-agent-skills](https://plugin87.github.io/ux-ui-agent-skills/)**
- — 26 live pages, every component harness and both reference screens, with a
-theme toggle. No install, no clone.
+ — 46 live pages: sixteen whole-product screens, every component harness, both
+reference screens, with a theme toggle. No install, no clone.
 
 <img src=".github/images/dashboard-light.png" alt="Atlas revenue console in light theme: sidebar navigation, a hero net-recurring-revenue figure at 2.48 million with a weekly bar chart, retention and churn cards, a donut of revenue by plan, an account ranking, regional sparklines, a sortable renewals table and an activity feed" />
 
@@ -217,7 +217,7 @@ as project context.
 "Design a notification component with all states and accessibility"
 "Build the billing settings screen, one shared theme, light and dark"
 "/grill-me"      interrogate the brief before anything is built
-"/gate"          run all 38 checks and report the real N/N
+"/gate"          run all 42 checks and report the real N/N
 "/critique"      hand the result to a critic that argues for rejection
 ```
 
@@ -279,10 +279,10 @@ Working on the kit itself, or want it vendored? [Clone and copy](docs/GUIDE.md#i
 ## Proving It, and Admitting What Cannot Be Proven
 
 
-The kit ships **41 objective gates** behind one command:
+The kit ships **42 objective gates** behind one command:
 
 ```bash
-node scripts/accuracy_report.mjs     # 41/41 or it fails — no partial credit
+node scripts/accuracy_report.mjs     # 42/42 or it fails — no partial credit
 ```
 
 Token validity, WCAG contrast on a real headless render in light *and* dark, every
@@ -291,11 +291,12 @@ at 280/320/414, target size, keyboard operability, reduced motion (including
 content that only an animation reveals), silent text clipping, token-by-intent,
 and zero emoji anywhere in the output or the instruction surface.
 
-**What that number covers, stated exactly.** 31 of the 41 checks open a real
+**What that number covers, stated exactly.** 31 of the 42 checks open a real
 browser, so what they measure is **rendered HTML**: the 23 component harnesses,
-the reference app, the live demo, the starter template. The other 10 read files —
-token JSON and alias resolution, contrast math on the token source, component
-specs, hardcoded values, theme references, emoji, the instruction surface.
+the sixteen industry screens, the reference app, the live demo, the starter
+template. The other 11 read files — token JSON and alias resolution, contrast
+math on the token source, component specs, hardcoded values, theme references,
+emoji, the instruction surface.
 
 Framework source (`.tsx`, `.vue`, `.swift`) is therefore reached by the
 file-reading checks only: no emoji, no hardcoded values, every `var(--…)`
@@ -329,7 +330,7 @@ caught two real defects the 34-check gate had missed. See `evals/README.md`.
 
 | Where | What is in it |
 |---|---|
-| **[Live demo](https://plugin87.github.io/ux-ui-agent-skills/)** | 26 rendered pages: every component harness, both reference screens, a theme toggle |
+| **[Live demo](https://plugin87.github.io/ux-ui-agent-skills/)** | 46 rendered pages: sixteen industry screens, every component harness, both reference screens, a theme toggle |
 | [docs/GUIDE.md](docs/GUIDE.md) | Using it as a plugin (inventory, management, token cost), how the skills compose, the repo map, token architecture, frameworks, interop, a11y standards, starting a new product project |
 | [CHANGELOG.md](CHANGELOG.md) | Every release, newest first |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | The bar for a pull request, and how to add a gate that can still say no |
@@ -342,7 +343,7 @@ caught two real defects the 34-check gate had missed. See `evals/README.md`.
 ## Contributing
 
 
-Two commands are the whole bar: `node scripts/accuracy_report.mjs` (38/38, no
+Two commands are the whole bar: `node scripts/accuracy_report.mjs` (42/42, no
 partial credit) and `npm run test:gates` (every gate must still reject its
 broken fixture). Paste the real output in the pull request rather than
 describing it.

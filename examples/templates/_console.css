@@ -38,6 +38,14 @@ h1{font-size:var(--text-4xl);letter-spacing:-0.035em;line-height:var(--leading-t
 h2{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;
   color:var(--lin-ink-3)}
 .note{color:var(--lin-ink-3);font-size:var(--text-xs);min-inline-size:0;overflow-wrap:anywhere}
+
+/* A grid row is as tall as its tallest item, and `align-content:start` packs the
+   short panel's content to the top - so the short panel ends in a bordered void.
+   Two ways out, and the panel has to pick one:
+   `.fill`   one child (a map, a heatmap, a chart) absorbs the slack,
+   `.spread` a list of rows shares the slack out as breathing room. */
+.panel.fill{align-content:normal;grid-template-rows:auto minmax(0,1fr)}
+.panel.spread{align-content:space-between}
 /* On a genuinely narrow viewport a panel title and its aside cannot share a row:
    stacking them is what keeps the page from being pushed sideways. */
 @media (max-width:30rem){
