@@ -10,7 +10,7 @@
   body{font-family:var(--font-sans);background:var(--color-surface-page);color:var(--color-text-primary);padding:var(--space-6)}
   h1{font-size:var(--text-4xl);line-height:var(--leading-tight);letter-spacing:-0.02em;margin-bottom:var(--space-4)}
   h2{font-size:var(--text-lg);margin:var(--space-6) 0 var(--space-2)}
-  .stack{display:grid;gap:var(--space-3);max-inline-size:520px}
+  .stack{display:grid;gap:var(--space-3);max-inline-size:32.5rem}
   /* alert: icon + text, full hairline border, no colored left bar */
   .alert{display:grid;grid-template-columns:auto 1fr;gap:var(--space-3);align-items:start;
     padding:var(--space-3) var(--space-4);background:var(--color-surface-card);
@@ -24,13 +24,13 @@
   /* progress */
   .bar{height:.5rem;background:var(--color-surface-raised);border-radius:var(--radius-full);overflow:hidden}
   .bar > span{display:block;height:100%;background:var(--color-action-primary);border-radius:inherit}
-  .bar--indet > span{inline-size:40%;animation:slide 1.2s ease-in-out infinite}
+  .bar--indet > span{inline-size:40%;animation:slide 1.2s ease-in-out infinite} /* ds-allow-hardcode: an indeterminate loop is not a transition; the duration scale tops out at 320ms */
   @keyframes slide{0%{margin-inline-start:-40%}100%{margin-inline-start:100%}}
   @media(prefers-reduced-motion:reduce){.bar--indet > span{animation:none;inline-size:100%}}
   .meta{font-size:var(--text-sm);color:var(--color-text-secondary);margin-block-start:var(--space-2)}
   /* skeleton */
   .sk{background:var(--color-surface-raised);border-radius:var(--radius-button);position:relative;overflow:hidden}
-  .sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:sh 1.3s infinite}
+  .sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:sh 1.3s infinite} /* ds-allow-hardcode: a skeleton shimmer loop, same reason as the indeterminate bar above */
   @keyframes sh{100%{transform:translateX(100%)}}
   @media(prefers-reduced-motion:reduce){.sk::after{animation:none}}
   .sk-line{height:.8rem;margin-block-end:var(--space-2)}

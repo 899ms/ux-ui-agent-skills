@@ -12,10 +12,10 @@
   .btn{height:var(--size-control-md);padding-inline:var(--space-4);border:0;border-radius:var(--radius-button);font:500 var(--text-base)/1 var(--font-sans);cursor:pointer;background:var(--color-action-primary);color:var(--color-text-on-action)}
   .btn:hover{background:var(--color-action-primary-hover)}
   .btn:focus-visible{outline:none;box-shadow:var(--shadow-focus-ring)}
-  kbd{font:600 var(--text-xs)/1 var(--font-sans);background:var(--color-surface-raised);color:var(--color-text-primary);border-radius:var(--radius-sm);padding:2px 6px;margin-inline-start:var(--space-2)}
+  kbd{font:600 var(--text-xs)/1 var(--font-sans);background:var(--color-surface-raised);color:var(--color-text-primary);border-radius:var(--radius-sm);padding:2px 6px; /* ds-allow-hardcode: a kbd cap is sized optically, below the 4px step */margin-inline-start:var(--space-2)}
   .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:grid;justify-items:center;align-items:start;padding-block-start:12vh}
   .scrim[hidden]{display:none}
-  .palette{inline-size:min(92vw,560px);background:var(--color-surface-card);border:1px solid var(--color-border-default);
+  .palette{inline-size:min(92vw,35rem);background:var(--color-surface-card);border:1px solid var(--color-border-default);
     border-radius:var(--radius-card);box-shadow:var(--shadow-lg);overflow:hidden}
   .pinput{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-4);border-block-end:1px solid var(--color-border-default)}
   .pinput svg{inline-size:1.1rem;block-size:1.1rem;flex:none;color:var(--color-text-secondary);fill:none;stroke-width:2}

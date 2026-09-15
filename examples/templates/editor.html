@@ -32,7 +32,7 @@
   .strip{position:relative;block-size:2.5rem;border-radius:var(--radius-sm);background:var(--lin-raised);
     min-inline-size:0;overflow:hidden}
   .strip.audio{block-size:2rem}
-  .clip{position:absolute;inset-block:3px;inset-inline-start:var(--l);inline-size:var(--w);
+  .clip{position:absolute;inset-block:3px;inset-inline-start:var(--l);inline-size:var(--w); /* ds-allow-hardcode: the inset is the lane gutter that keeps a bar off its track edge - below the 4px spacing step on purpose */
     border-radius:var(--radius-sm);display:grid;align-items:center;padding-inline:var(--space-2);overflow:hidden}
   .clip .cn{font-size:.625rem;font-family:var(--font-mono);white-space:nowrap;overflow:hidden;
     text-overflow:ellipsis;color:var(--lin-canvas);font-weight:700;letter-spacing:.04em}

@@ -20,6 +20,8 @@ const checks = [
   ['No hardcoded values (hex/px/ms/Tailwind/font) — golden', 'python3 scripts/lint_hardcodes.py examples/golden'],
   ['No hardcoded values — sample-app', 'python3 scripts/lint_hardcodes.py examples/sample-app'],
   ['No hardcoded values — industry templates', 'python3 scripts/lint_hardcodes.py examples/templates'],
+  ['No hardcoded values — every harness, demo and front door (the whole examples tree)',
+   'python3 scripts/lint_hardcodes.py examples'],
   ['Every var(--…) resolves to the theme (no floating tokens)', 'python3 scripts/validate_theme_refs.py'],
   ['No emoji in UI output, taste docs, or the agent instruction surface', 'python3 scripts/check_no_emoji.py'],
   ['REAL-render WCAG — sample-app (light)', 'node scripts/measure_render.mjs examples/sample-app/preview.html'],

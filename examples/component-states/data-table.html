@@ -9,7 +9,7 @@
   *{box-sizing:border-box;margin:0}
   body{font-family:var(--font-sans);background:var(--color-surface-page);color:var(--color-text-primary);padding:var(--space-6)}
   h1{font-size:var(--text-4xl);line-height:var(--leading-tight);letter-spacing:-0.02em;margin-bottom:var(--space-4)}
-  .panel{border:1px solid var(--color-border-default);border-radius:var(--radius-card);overflow:hidden;max-inline-size:760px}
+  .panel{border:1px solid var(--color-border-default);border-radius:var(--radius-card);overflow:hidden;max-inline-size:47.5rem}
   table{inline-size:100%;border-collapse:collapse;font-size:var(--text-sm)}
   caption{text-align:start;padding:var(--space-3) var(--space-4);font-size:var(--text-base);font-weight:600}
   th,td{padding:var(--space-3) var(--space-4);text-align:start;border-block-start:1px solid var(--color-border-default)}
@@ -23,7 +23,7 @@
   /* thin custom checkbox (matches form-controls) */
   .control{position:relative;display:inline-block;inline-size:.95rem;block-size:.95rem;vertical-align:middle}
   .control input{position:absolute;inset:0;inline-size:100%;block-size:100%;margin:0;opacity:0;cursor:pointer}
-  .control .box{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;border:1.5px solid var(--color-border-strong);
+  .control .box{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;border:var(--border-width-medium) solid var(--color-border-strong);
     border-radius:.25rem;background:var(--color-surface-page);transition:background var(--transition-micro,150ms),border-color var(--transition-micro,150ms)}
   .control .box svg{inline-size:.62rem;block-size:.62rem;stroke:var(--color-text-on-action);fill:none;stroke-width:2;
     stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity var(--transition-micro,150ms)}

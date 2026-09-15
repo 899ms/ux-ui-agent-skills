@@ -33,7 +33,9 @@
 
   /* two values the shared theme has no token for */
   --ring-w:2px;              /* focus outline width */
-  --blur-sm:8px;             /* glass blur */
+  --blur-sm:8px;
+  /* a soft glow behind the hero, and the depth the tilting gallery is read in */
+  --blur-glow:30px; --perspective-gallery:75rem;             /* glass blur */
   --marquee-dur:120s;        /* one full pass of the library marquee */
   --sweep-dur:4s;            /* one radar revolution */
 

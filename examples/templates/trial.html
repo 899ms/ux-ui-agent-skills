@@ -34,7 +34,7 @@
   .band{opacity:.12} .band.trt{fill:var(--color-chart-1)} .band.ctl{fill:var(--color-chart-4)}
   .armkey{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);font-size:var(--text-sm)}
   .armkey span{display:inline-flex;align-items:center;gap:var(--space-2);min-inline-size:0}
-  .armkey i{inline-size:1.5rem;block-size:0;border-block-start:3px solid var(--c);flex:none;border-radius:var(--radius-full)}
+  .armkey i{inline-size:1.5rem;block-size:0;border-block-start:var(--border-width-medium) solid var(--c);flex:none;border-radius:var(--radius-full)}
 
   .risk{font-size:var(--text-xs)}
   .risk th,.risk td{padding:var(--space-2) var(--space-2);border-block-start:1px solid var(--color-border-default)}
@@ -52,7 +52,7 @@
   .fplot::before{content:"";position:absolute;inset-block:0;inset-inline-start:var(--null);
     inline-size:1px;background:var(--color-border-strong)}
   .ci{position:absolute;inset-block-start:50%;inset-inline-start:var(--x1);inline-size:var(--w);
-    block-size:2px;background:var(--color-text-secondary);transform:translateY(-50%)}
+    block-size:var(--border-width-medium);background:var(--color-text-secondary);transform:translateY(-50%)}
   .pt{position:absolute;inset-block-start:50%;inset-inline-start:var(--x);inline-size:.625rem;
     block-size:.625rem;background:var(--color-chart-1);border-radius:var(--radius-full);
     transform:translate(-50%,-50%)}

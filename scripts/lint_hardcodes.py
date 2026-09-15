@@ -23,6 +23,10 @@ CODE_EXT = {".css", ".scss", ".tsx", ".jsx", ".ts", ".js", ".vue", ".svelte",
             ".swift", ".kt", ".dart", ".html"}
 
 HEX = re.compile(r"(?<![\w&])#[0-9a-fA-F]{3,8}\b")
+# Outside CSS, a # is far more often prose than a colour: "issue #412" is not a
+# hex. In markup a hex only counts in value position - after a colon, an equals,
+# an opening paren or a comma.
+HEX_VALUE = re.compile(r"[:=(,]\s*[\"']?#[0-9a-fA-F]{3,8}\b")
 PX = re.compile(r"(?<![\w.])\d+(?:\.\d+)?px\b")
 MS = re.compile(r"(?<![\w.])\d+(?:\.\d+)?m?s\b")
 # raw Tailwind palette utilities (bg-gray-500, text-blue-600, border-red-400 …) that
@@ -32,8 +36,12 @@ _TW_COLOR = r"(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|gree
 TW = re.compile(rf"(?<![\w-]){_TW_PREFIX}-{_TW_COLOR}-(?:50|100|200|300|400|500|600|700|800|900|950)\b")
 # hardcoded font-family not coming from a token/var
 FONT = re.compile(r"font-family\s*:\s*(?!.*var\()")
-# contexts that mean "this is a token, not a hardcode"
-TOKEN_CTX = re.compile(r"var\(--|theme\(|tokens?[./]|\{[\w.\-]+\}|--[\w\-]+\s*:")
+# A custom-property definition line, where a raw value is the point.
+TOKEN_DEF = re.compile(r"--[\w\-]+\s*:")
+# Other token syntaxes that still exempt a whole line: a theme() call, a
+# tokens.foo path, a {token.reference}. Unlike var(), these are rare enough that
+# narrowing them has no measured benefit.
+THEME_FN = re.compile(r"theme\(|tokens?[./]|\{[\w.\-]+\}")
 ALLOW = "ds-allow-hardcode"
 # px values that are conventionally fine (hairlines, zero, 1px borders) — still reported as info? keep strict but allow 0/1px
 PX_OK = {"0px", "1px"}
@@ -74,14 +82,52 @@ def strip_block_comment(line, in_comment):
     return "".join(out), in_comment
 
 
+def mask_var_refs(line):
+    """Blank out every `var(...)` span, nesting and fallbacks included.
+
+    A token reference is not a hardcode, but exempting the whole LINE because it
+    holds one was the biggest hole in this gate: `padding: var(--space-2) 13px`
+    passed, and so did 106 other values across examples/. Only the reference is
+    exempt; whatever sits beside it still gets read."""
+    out, i = [], 0
+    while True:
+        j = line.find("var(", i)
+        if j < 0:
+            out.append(line[i:])
+            return "".join(out)
+        out.append(line[i:j])
+        depth, k = 0, j + 3
+        while k < len(line):
+            if line[k] == "(":
+                depth += 1
+            elif line[k] == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+            k += 1
+        i = k + 1
+
+
 def lint_line(line, tailwind=True, css_scope=True):
     """css_scope=False means the line is markup or prose, not CSS.
 
     A wait time in a table cell ("8m 04s") is content, not style. Flagging it
     taught nobody anything and invited a fake exception comment, which is worse
     than the warning."""
-    if ALLOW in line or TOKEN_CTX.search(line):
+    if ALLOW in line:
         return []
+    # A custom-property DEFINITION is where raw values are supposed to live
+    # (`--space-2: 8px`), so the line is exempt. A line that merely USES one is
+    # not: only the var() span is removed, and the rest is still read.
+    if TOKEN_DEF.search(line):
+        return []
+    if THEME_FN.search(line):
+        return []
+    # Lengths, times and colours are read with the var() spans blanked out, so a
+    # literal beside a token is still seen. FONT keeps the ORIGINAL line: its test
+    # is "font-family: not followed by var(", and masking first removes the very
+    # thing it looks for - which flagged all 80 tokenised font stacks in one pass.
+    code = mask_var_refs(line)
     stripped = line.strip()
     if stripped.startswith(("//", "*", "/*", "#", "<!--")):
         return []
@@ -89,13 +135,13 @@ def lint_line(line, tailwind=True, css_scope=True):
     # @media / @container conditions can't use var() (a CSS limitation) — breakpoint px there
     # is not drift; skip px/ms on those lines (still check hex/tailwind/font).
     media_cond = "@media" in line or "@container" in line
-    for m in HEX.finditer(line):
-        hits.append(("hex", m.group(0)))
+    for m in (HEX if css_scope else HEX_VALUE).finditer(code):
+        hits.append(("hex", m.group(0).lstrip(":=(, \"'")))
     if not media_cond and css_scope:
-        for m in PX.finditer(line):
+        for m in PX.finditer(code):
             if m.group(0) not in PX_OK:
                 hits.append(("px", m.group(0)))
-        for m in MS.finditer(line):
+        for m in MS.finditer(code):
             hits.append(("time", m.group(0)))
     if tailwind:
         for m in TW.finditer(line):

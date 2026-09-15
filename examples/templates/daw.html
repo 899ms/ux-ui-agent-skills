@@ -59,7 +59,7 @@
   .tg[aria-pressed="true"]{background:var(--color-feedback-warning);color:var(--lin-canvas);border-color:transparent}
   .strip{position:relative;block-size:2.25rem;border-radius:var(--radius-sm);background:var(--lin-raised);
     min-inline-size:0;overflow:hidden}
-  .clip{position:absolute;inset-block:2px;inset-inline-start:var(--l);inline-size:var(--w);
+  .clip{position:absolute;inset-block:2px;inset-inline-start:var(--l);inline-size:var(--w); /* ds-allow-hardcode: the inset is the lane gutter that keeps a bar off its track edge - below the 4px spacing step on purpose */
     border-radius:var(--radius-sm);overflow:hidden;display:block}
   .clip svg{inline-size:100%;block-size:100%;display:block}
   .clip path{fill:currentColor;opacity:.9}

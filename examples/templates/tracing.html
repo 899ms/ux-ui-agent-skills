@@ -51,7 +51,7 @@
     color:var(--lin-ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .span .track{position:relative;block-size:.875rem;border-radius:var(--radius-sm);background:var(--lin-raised);
     min-inline-size:0}
-  .span .bar{position:absolute;inset-block:2px;inset-inline-start:var(--l);inline-size:var(--w);
+  .span .bar{position:absolute;inset-block:2px;inset-inline-start:var(--l);inline-size:var(--w); /* ds-allow-hardcode: the inset is the lane gutter that keeps a bar off its track edge - below the 4px spacing step on purpose */
     border-radius:var(--radius-sm)}
   .span .ms{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--lin-ink-3);text-align:end}
   /* bar colours live in their own namespace: .c4 is already a column span, and

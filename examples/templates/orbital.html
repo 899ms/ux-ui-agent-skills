@@ -74,7 +74,7 @@
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bars{position:relative;block-size:1.25rem;border-radius:var(--radius-sm);background:var(--lin-raised);
     border:1px solid var(--lin-hairline-soft);overflow:hidden}
-  .pass{position:absolute;inset-block:2px;inset-inline-start:var(--l);inline-size:var(--w);
+  .pass{position:absolute;inset-block:2px;inset-inline-start:var(--l);inline-size:var(--w); /* ds-allow-hardcode: the inset is the lane gutter that keeps a bar off its track edge - below the 4px spacing step on purpose */
     border-radius:var(--radius-sm);background:var(--trm-accent);opacity:.85}
   .pass.warn{background:var(--color-feedback-warning)}
   /* five nowrap labels in a row have a min-content width of their own; on a

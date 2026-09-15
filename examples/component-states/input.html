@@ -9,7 +9,7 @@
   *{box-sizing:border-box;margin:0}
   body{font-family:var(--font-sans);background:var(--color-surface-page);color:var(--color-text-primary);padding:var(--space-6)}
   h1{font-size:var(--text-4xl);line-height:var(--leading-tight);letter-spacing:-0.02em;margin-bottom:var(--space-4)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-4)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--space-4)}
   .cell{padding:var(--space-4);border:1px solid var(--color-border-default);border-radius:var(--radius-card);background:var(--color-surface-card)}
   .field{display:grid;gap:var(--space-2)}
   .label{font-size:var(--text-sm);font-weight:500}
@@ -24,7 +24,7 @@
   .input:disabled{opacity:.5;cursor:not-allowed}
   .input[readonly]{background:var(--color-surface-raised)}
   .input[aria-invalid="true"]{border-color:var(--color-action-danger)}
-  .spin{position:absolute;right:var(--space-3);inline-size:1em;block-size:1em;border:2px solid var(--color-text-secondary);border-block-start-color:transparent;border-radius:var(--radius-full);animation:s .6s linear infinite}
+  .spin{position:absolute;right:var(--space-3);inline-size:1em;block-size:1em;border:var(--border-width-medium) solid var(--color-text-secondary);border-block-start-color:transparent;border-radius:var(--radius-full);animation:s .6s linear infinite}
   @keyframes s{to{transform:rotate(360deg)}}
   @media(prefers-reduced-motion:reduce){.spin{animation:none}}
 </style>

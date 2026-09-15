@@ -10,14 +10,14 @@
   body{font-family:var(--font-sans);background:var(--color-surface-page);color:var(--color-text-primary);padding:var(--space-6)}
   h1{font-size:var(--text-4xl);line-height:var(--leading-tight);letter-spacing:-0.02em;margin-bottom:var(--space-4)}
   h2{font-size:var(--text-lg);margin:var(--space-4) 0 var(--space-2)}
-  .stack{display:grid;gap:var(--space-3);max-inline-size:360px}
+  .stack{display:grid;gap:var(--space-3);max-inline-size:22.5rem}
   label.row{display:flex;align-items:center;gap:var(--space-3);font-size:var(--text-base);cursor:pointer}
   label.row.muted{cursor:not-allowed}
   /* custom thin checkbox + radio: real input is visually hidden, box is drawn */
   .control{position:relative;inline-size:.95rem;block-size:.95rem;flex:none}
   .control input{position:absolute;inset:0;inline-size:100%;block-size:100%;margin:0;opacity:0;cursor:inherit}
   .control .box{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
-    border:1.5px solid var(--color-border-strong);background:var(--color-surface-page);
+    border:var(--border-width-medium) solid var(--color-border-strong);background:var(--color-surface-page);
     transition:background var(--transition-micro,150ms),border-color var(--transition-micro,150ms)}
   .control.cb .box{border-radius:.25rem}
   .control.rb .box{border-radius:var(--radius-full)}
@@ -43,7 +43,7 @@
   .switch{position:relative;inline-size:2.6rem;block-size:1.5rem;flex:none}
   .switch input{position:absolute;opacity:0;inline-size:100%;block-size:100%;margin:0;cursor:pointer}
   .track{position:absolute;inset:0;border-radius:var(--radius-full);background:var(--color-border-strong);transition:background var(--transition-micro,150ms)}
-  .thumb{position:absolute;top:.15rem;left:.15rem;inline-size:1.2rem;block-size:1.2rem;border-radius:var(--radius-full);background:#fff;transition:left var(--transition-micro,150ms)}
+  .thumb{position:absolute;top:.15rem;left:.15rem;inline-size:1.2rem;block-size:1.2rem;border-radius:var(--radius-full);background:var(--color-surface-card);transition:left var(--transition-micro,150ms)}
   .switch input:checked+.track{background:var(--color-action-primary)}
   .switch input:checked+.track .thumb{left:1.25rem}
   .switch input:focus-visible+.track{box-shadow:var(--shadow-focus-ring)}
