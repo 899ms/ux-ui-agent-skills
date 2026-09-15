@@ -74,6 +74,10 @@ const THUMBS = [
   ['examples/templates/warehouse.html','tpl-warehouse.png',   'dark',  [1200, 760]],
   ['examples/templates/mes.html',      'tpl-mes.png',         'dark',  [1200, 760]],
   ['examples/templates/dispatch.html', 'tpl-dispatch.png',    'dark',  [1200, 760]],
+  ['examples/templates/rail.html',     'tpl-rail.png',        'dark',  [1200, 760]],
+  ['examples/templates/trial.html',    'tpl-trial.png',       'light', [1200, 760]],
+  ['examples/templates/training.html', 'tpl-training.png',    'dark',  [1200, 760]],
+  ['examples/templates/weather.html',  'tpl-weather.png',     'dark',  [1200, 760]],
 ];
 const THUMB_DIR = join(ROOT, 'examples', 'thumbs');
 

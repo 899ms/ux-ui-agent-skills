@@ -63,6 +63,12 @@ main{display:flex;flex-direction:column;min-inline-size:0}
   .panel{padding:var(--space-4)}
   .panel > header{flex-direction:column;align-items:flex-start;gap:var(--space-1)}
 }
+/* A row is as tall as its tallest panel, and align-content:start packs the short
+   one's content to the top - so it ends in a bordered void. A panel in a row has
+   to pick one: `.fill` hands the slack to one child (a chart, a map), `.spread`
+   shares it out between the rows as breathing room. */
+.panel.fill{align-content:normal;grid-template-rows:auto minmax(0,1fr)}
+.panel.spread{align-content:space-between}
 .panel h2{font-size:var(--text-lg);letter-spacing:-0.01em}
 .eyebrow{font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   color:var(--color-text-secondary)}
