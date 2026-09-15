@@ -36,6 +36,38 @@ Never delete silently. Deprecate, then remove:
 3. **Migrate** — provide a mapping (old → new) and, where possible, a codemod or `design-systems/crosswalk.md`-style table.
 4. **Remove** — only in a **major** release, after the window, with the removal listed in the changelog.
 
+### In force now: the short token names, removed in 3.0.0
+
+The harnesses in `examples/` grew a shorter vocabulary than `tokens/*.json`
+emits, so a theme generated from the token source did not define the names the
+harnesses used, and anyone who copied one got an undefined variable and no
+warning. `scripts/build_tokens.mjs` emits both names through the window; the
+alias block is one deletion in 3.0.0.
+
+| Deprecated | Replacement |
+|---|---|
+| `--color-action-danger` | `--color-action-destructive` |
+| `--color-action-danger-hover` | `--color-action-destructive-hover` |
+| `--color-text-error` | `--color-feedback-error-text` |
+| `--color-feedback-error` | `--color-feedback-error-icon` |
+| `--color-feedback-success` | `--color-feedback-success-icon` |
+| `--color-feedback-warning` | `--color-feedback-warning-icon` |
+| `--color-success` | `--color-feedback-success-icon` |
+| `--radius-pill` | `--radius-full` |
+| `--duration-normal` | `--duration-base` |
+| `--ease-emphasized` | `--ease-spring` |
+
+An alias is a rename, so it must resolve to the colour the old name meant.
+Writing `--color-action-danger: var(--color-action-primary)` would emit a blue
+Delete from the token build itself; `unit/build-tokens.test.mjs` pins the
+direction and asserts destructive and primary are never the same colour.
+
+**Still unmapped, and not aliases:** `--color-surface-inverse`,
+`--color-surface-brand`, `--color-text-inverse` and `--color-chart-track` have
+no counterpart in `tokens/` at all. They are defined in the demo theme only, so
+they are a gap in the token source rather than a rename, and adding them is a
+design decision about what those colours are - not a mechanical change.
+
 ## Change communication
 
 - Every release: what changed, why, who's affected, and the migration path. Lead with breaking changes.

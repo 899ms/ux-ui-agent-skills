@@ -45,6 +45,32 @@ test('--check passes, and says so, when every alias resolves', () => {
   assert.match(stderr, /every alias resolved/);
 });
 
+test('the deprecated danger alias resolves to destructive, never to primary', () => {
+  // Written the wrong way round once: --color-action-danger pointed at
+  // --color-action-primary, which is a blue Delete button emitted by the token
+  // build itself - the exact thing non-negotiable 1 exists to stop. An alias is
+  // a rename, so it has to land on the same colour the old name meant.
+  const out = join(mkdtempSync(join(tmpdir(), 'ds-alias-')), 'theme.css');
+  const r = run('node', ['scripts/build_tokens.mjs', '--out', out]);
+  assert.equal(r.status, 0);
+  const css = readFileSync(out, 'utf8');
+  assert.match(css, /--color-action-danger:\s*var\(--color-action-destructive\)/);
+  assert.doesNotMatch(css, /--color-action-danger:\s*var\(--color-action-primary\)/);
+  const hex = (name) => (css.match(new RegExp(`${name}:\\s*(#[0-9a-f]{3,8})`, 'i')) || [])[1];
+  assert.notEqual(hex('--color-action-destructive'), hex('--color-action-primary'),
+    'destructive and primary must not be the same colour');
+});
+
+test('every deprecated alias points at a variable the build actually emits', () => {
+  const out = join(mkdtempSync(join(tmpdir(), 'ds-alias2-')), 'theme.css');
+  assert.equal(run('node', ['scripts/build_tokens.mjs', '--check', '--out', out]).status, 0);
+  const css = readFileSync(out, 'utf8');
+  const defined = new Set([...css.matchAll(/^\s*(--[\w-]+):/gm)].map(m => m[1]));
+  for (const [, from, to] of css.matchAll(/^\s*(--[\w-]+):\s*var\((--[\w-]+)\);/gm)) {
+    assert.ok(defined.has(to), `${from} aliases ${to}, which is never defined`);
+  }
+});
+
 test('a dropped token is reported even without --check', () => {
   const { status, stderr } = build(BROKEN);
   assert.equal(status, 0, 'the generator still generates');
