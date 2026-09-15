@@ -26,6 +26,11 @@ const arg = (name) => (process.argv.find(a => a.startsWith(`--${name}=`)) || '')
   || (process.argv.includes(`--${name}`) ? process.argv[process.argv.indexOf(`--${name}`) + 1] : null);
 const out = arg('out');
 const IN = resolve(arg('in') || join(ROOT, 'tokens'));
+// --check turns the generator into a gate. Without it an alias that cannot be
+// resolved is dropped and the var simply never appears, which is how a
+// colours-only build stood for four releases while CI checked only exit status.
+const CHECK = process.argv.includes('--check');
+const unresolved = [];
 const SINGLE = statSync(IN).isFile();
 const TOKENS = SINGLE ? dirname(IN) : IN;
 
@@ -75,6 +80,10 @@ function emit(obj, prefix, bucket, dark = null) {
     if (v && typeof v === 'object' && '$value' in v) {
       const hex = res(v.$value, 0, dark);
       if (typeof hex === 'string' && /^(#|rgb|hsl)/.test(hex)) lines[bucket].push(`  --color-${prefix}${k}: ${hex};`);
+      /* The colour path filters on "looks like a colour" rather than on a stray
+         brace, so an unresolved reference fell out here too - the same silent
+         drop wearing a different condition. */
+      else if (typeof hex === 'string' && /\{[^}]+\}/.test(hex)) unresolved.push([`--color-${prefix}${k}`, hex]);
     } else if (v && typeof v === 'object') {
       emit(v, `${prefix}${k}-`, bucket, dark);
     }
@@ -188,7 +197,8 @@ function emitGroup(node, prefix, bucket, dark = null) {
     if (v && typeof v === 'object' && '$value' in v) {
       const out = cssValue(v.$value, dark, v.$type);
       const name = k.startsWith(prefix) ? k : `${prefix}${k}`;   // "ease-" + "ease-out" is one name, not two
-      if (out !== null && !/\{[^}]+\}/.test(String(out))) lines[bucket].push(`  --${name}: ${out};`);
+      if (out !== null && /\{[^}]+\}/.test(String(out))) unresolved.push([`--${name}`, String(out)]);
+    else if (out !== null) lines[bucket].push(`  --${name}: ${out};`);
     } else if (v && typeof v === 'object') {
       emitGroup(v, `${prefix}${k}-`, bucket, dark);
     }
@@ -199,7 +209,9 @@ function emitLeafOrGroup(node, prefix, bucket, dark = null) {
   if (!node) return;
   if ('$value' in node) {
     const out = cssValue(node.$value, dark, node.$type);
-    if (out !== null && !/\{[^}]+\}/.test(String(out))) lines[bucket].push(`  --${prefix.replace(/-$/, '')}: ${out};`);
+    const nm = `--${prefix.replace(/-$/, '')}`;
+    if (out !== null && /\{[^}]+\}/.test(String(out))) unresolved.push([nm, String(out)]);
+    else if (out !== null) lines[bucket].push(`  ${nm}: ${out};`);
   } else emitGroup(node, prefix, bucket, dark);
 }
 
@@ -227,4 +239,21 @@ if (out) {
   console.log(`wrote ${[...new Set(lines.light)].length} light + ${[...new Set(lines.dark)].length} dark color vars → ${out}`);
 } else {
   process.stdout.write(css);
+}
+
+/* A reference that never resolved is not a cosmetic problem: the variable is
+   absent from the theme, so every page that uses it falls back to nothing. Say
+   so always, and fail under --check. */
+if (unresolved.length) {
+  const where = out ? ` (still written to ${out})` : '';
+  console.error(`\n${unresolved.length} token(s) dropped - the reference never resolved${where}:`);
+  for (const [name, val] of unresolved.slice(0, 12)) console.error(`  ${name}: ${val}`);
+  if (unresolved.length > 12) console.error(`  ... and ${unresolved.length - 12} more`);
+  if (CHECK) {
+    console.error('\nFAIL: --check treats a dropped token as an error. Fix the reference, or remove the token.');
+    process.exit(1);
+  }
+  console.error('Re-run with --check to make this a failure.');
+} else if (CHECK) {
+  console.error('OK: every alias resolved; no token was dropped.');
 }

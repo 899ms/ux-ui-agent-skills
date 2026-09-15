@@ -50,6 +50,14 @@ test('verify_keyboard rejects a stateful control Enter and Space cannot operate'
   rejects(gate('verify_keyboard.mjs', [F('bad/dead-key-toggle.html')]), /verify_keyboard: FAIL/);
 });
 
+test('verify_keyboard rejects an interactive role Tab can never reach', () => {
+  // The gate used to filter this out before auditing: not tabbable, so not
+  // looked at. A div role="button" with no tabindex is the commonest keyboard
+  // bug there is, and the fixture pairs it with a correct one so a gate that
+  // flagged the role itself would fail for the wrong reason.
+  rejects(gate('verify_keyboard.mjs', [F('bad/div-button-no-tabindex.html')]), /A0 no tab stop/);
+});
+
 test('verify_overflow rejects silently clipped text', () => {
   rejects(gate('verify_overflow.mjs', [F('bad/clipped.html')]), /clipped/);
 });

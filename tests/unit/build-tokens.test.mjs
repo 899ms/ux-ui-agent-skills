@@ -10,17 +10,46 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { run, ROOT } from '../helpers/run.mjs';
 
-function build(tokens) {
+function build(tokens, flags = []) {
   const dir = mkdtempSync(join(tmpdir(), 'ds-tokens-'));
   const inDir = join(dir, 'in');
   mkdirSync(inDir);
   writeFileSync(join(inDir, 'colors.json'), JSON.stringify(tokens, null, 2));
   const out = join(dir, 'theme.css');
-  const r = run('node', ['scripts/build_tokens.mjs', '--in', inDir, '--out', out]);
-  const css = r.status === 0 ? readFileSync(out, 'utf8') : '';
+  const r = run('node', ['scripts/build_tokens.mjs', '--in', inDir, '--out', out, ...flags]);
+  const css = readFileSync(out, 'utf8');
   rmSync(dir, { recursive: true, force: true });
   return { ...r, css };
 }
+
+const BROKEN = {
+  primitive: { blue: { 600: { $type: 'color', $value: '#2563EB' } } },
+  semantic: { action: { primary: { $type: 'color', $value: '{primitive.blue.500}' } } },
+};
+
+test('--check fails on an alias that never resolved', () => {
+  // Without the flag this is a generator and stays one: it writes what it can
+  // and exits 0. With it, a dropped token is an error, because the variable is
+  // simply absent from the theme and every page using it falls back to nothing.
+  const { status, stderr } = build(BROKEN, ['--check']);
+  assert.equal(status, 1);
+  assert.match(stderr, /--color-action-primary: \{primitive\.blue\.500\}/);
+});
+
+test('--check passes, and says so, when every alias resolves', () => {
+  const { status, stderr } = build({
+    primitive: { blue: { 600: { $type: 'color', $value: '#2563EB' } } },
+    semantic: { action: { primary: { $type: 'color', $value: '{primitive.blue.600}' } } },
+  }, ['--check']);
+  assert.equal(status, 0);
+  assert.match(stderr, /every alias resolved/);
+});
+
+test('a dropped token is reported even without --check', () => {
+  const { status, stderr } = build(BROKEN);
+  assert.equal(status, 0, 'the generator still generates');
+  assert.match(stderr, /never resolved/);
+});
 
 test('a resolvable alias chain reaches the emitted CSS as a final value', () => {
   const { status, css } = build({

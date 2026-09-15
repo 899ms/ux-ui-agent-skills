@@ -118,9 +118,28 @@ const MARK = () => {
     for (const el of group) if (el !== stop) radioSkip.add(el);
   }
 
+  /* An interactive ROLE that stands on its own - a button, a link, a checkbox, a
+     switch - is reached by Tab or it is not reached at all. A menuitem, option or
+     tab is different: those live inside a composite and are reached with arrows,
+     which is why they are not listed here. */
+  const STANDALONE = ['button', 'link', 'checkbox', 'switch'];
+  const orphans = [];
+
   for (const el of root.querySelectorAll(CONTROL_SEL)) {
     if (radioSkip.has(el)) continue;
-    if (!vis(el) || !operable(el) || !tabbable(el)) continue;
+    if (!vis(el) || !operable(el) || !tabbable(el)) {
+      /* The gate used to `continue` here, which filtered out the single most
+         common keyboard bug before auditing anything: a div carrying an
+         interactive role and no tabindex at all. `tabindex="-1"` is excluded on
+         purpose - that is a deliberate choice, and composites rely on it. */
+      if (vis(el) && operable(el)
+          && el.getAttribute('tabindex') === null
+          && !NATIVE.test(el.tagName.toLowerCase())
+          && STANDALONE.includes(el.getAttribute('role'))) {
+        orphans.push(name(el));
+      }
+      continue;
+    }
     el.setAttribute('data-kbd-idx', String(n));
     const stateAttr = STATE.find(a => el.hasAttribute(a)) || null;
     controls.push({ i: n, name: name(el), stateAttr, native: NATIVE.test(el.tagName.toLowerCase()) });
@@ -157,7 +176,7 @@ const MARK = () => {
     });
     c++;
   }
-  return { controls, composites, scoped: !!openDialog };
+  return { controls, composites, orphans, scoped: !!openDialog };
 };
 
 const browser = await chromium.launch({ channel: 'chrome' });
@@ -169,9 +188,15 @@ for (const f of files) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto('file://' + f);
 
-  const { controls, composites, scoped } = await page.evaluate(MARK);
+  const { controls, composites, orphans, scoped } = await page.evaluate(MARK);
   totalControls += controls.length;
   totalComposites += composites.length;
+
+  // ---- A0. an interactive role with no way into the tab order at all.
+  if (orphans.length) {
+    problems.push(`${fname}  [A0 no tab stop]  ${orphans.length} control(s) declare an interactive role but carry no tabindex, so Tab can never reach them`);
+    for (const x of orphans.slice(0, 4)) problems.push(`      ${x}`);
+  }
 
   // ---- A. reachability: actually drive Tab and see who receives focus.
   if (controls.length) {

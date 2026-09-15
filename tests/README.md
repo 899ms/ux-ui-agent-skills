@@ -57,18 +57,14 @@ directory exists to prevent.
   `validate_instruction_surface.py`, `validate_template.py`, `design_systems.py`,
   and `accuracy_report.mjs`. Making them testable means giving the first three a
   `--root` flag. Not done.
-- **`verify_keyboard.mjs` only audits controls already in the tab order** — it
-  filters on `tabbable(el)` before checking anything. The classic
-  `<div role="button">` with no `tabindex` is therefore invisible to it. The
-  fixture here (`bad/dead-key-toggle.html`) exercises the dead-key signal
-  instead, which the gate does detect.
-- **`build_tokens.mjs` has no failure mode.** It is a generator: it never exits
-  non-zero and silently drops a reference it cannot resolve. `unit/` asserts its
-  output instead — a broken alias is dropped rather than emitted as a literal
-  `{…}`; a directory build emits the whole system rather than colour alone; and
-  no composite token reaches the CSS as `[object Object]` or a stray brace. Those
-  last two exist because the bugs shipped: the colour-only directory build stood
-  for four releases while CI ran the command and checked only its exit status.
+- **`build_tokens.mjs` is a generator first.** Without `--check` it still writes
+  what it can and exits 0, because that is what a generator should do; the gate
+  runs it with `--check`, which turns a dropped reference into a failure. `unit/`
+  covers both modes, plus the output contract: a directory build emits the whole
+  system rather than colour alone, and no composite token reaches the CSS as
+  `[object Object]` or a stray brace. Those last two exist because the bugs
+  shipped — the colour-only directory build stood for four releases while CI ran
+  the command and checked only its exit status.
 - **Taste is still not covered.** `slop_tells` and `taste_audit` only fail on
   HIGH findings under `--strict`; MED and LOW never fail anything, by design.
   These tests confirm the HIGH signals fire. They say nothing about whether the
