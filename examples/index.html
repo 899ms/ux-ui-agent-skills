@@ -70,13 +70,31 @@
   .rail{display:flex;gap:var(--space-6);padding-inline:var(--space-6);will-change:transform}
   @media (max-width:60rem){.rail{flex-direction:column;padding-inline:var(--space-4)}}
   .slide{flex:0 0 min(62rem,86vw);border-radius:var(--radius-lg);overflow:hidden;
-    border:1px solid var(--lin-hairline);background:var(--lin-panel);
+    border:1px solid var(--lin-hairline-soft);background:var(--lin-panel);
     box-shadow:0 50px 100px -40px rgba(0,0,0,.9)} /* ds-allow-hardcode: elevation ramp for a near-black canvas */
   @media (max-width:60rem){.slide{flex:auto}}
-  .slide figcaption{display:flex;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap;
-    padding:var(--space-4) var(--space-5);border-block-start:1px solid var(--lin-hairline);
-    font-size:var(--text-sm);color:var(--lin-ink-2)}
-  .slide figcaption b{color:var(--lin-ink)}
+  /* A window bar turns a viewport capture into an application, which is what it
+     is. Without it the screenshot just stops, and a row sliced in half reads as
+     a rendering fault rather than a crop. */
+  .chrome{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-4);
+    border-block-end:1px solid var(--lin-hairline-soft);background:var(--lin-raised);min-inline-size:0}
+  .chrome .dots{display:flex;gap:var(--space-2);flex:none}
+  .chrome .dots i{inline-size:.5rem;block-size:.5rem;border-radius:var(--radius-full);
+    background:var(--lin-hairline);display:block}
+  .chrome b{font-size:var(--text-sm);font-weight:600;color:var(--lin-ink);min-inline-size:0;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .chrome em{margin-inline-start:auto;font-family:var(--font-mono);font-size:.625rem;font-style:normal;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--lin-ink-3);flex:none}
+  @media (max-width:30rem){.chrome em{display:none}}
+  /* The capture ends mid-content by nature. Fading the last strip into the panel
+     makes that a horizon instead of a cut, and gives the caption a ground. */
+  .shot{position:relative;display:block;min-inline-size:0}
+  .shot img{display:block;inline-size:100%;block-size:auto}
+  .shot figcaption{position:absolute;inset-inline:0;inset-block-end:0;
+    padding:var(--space-8) var(--space-5) var(--space-4);font-size:var(--text-sm);
+    color:var(--lin-ink);font-weight:500;
+    background:linear-gradient(to bottom,transparent,var(--lin-panel) 88%)}
+  @media (max-width:30rem){.shot figcaption{padding-block-start:var(--space-6)}}
 
   /* ---------- numbers ---------- */
   .counts{padding-block:var(--space-20);border-block-start:1px solid var(--lin-hairline)}
@@ -184,24 +202,36 @@
   <div class="sticky">
     <div class="rail" id="rail">
       <figure class="slide" style="margin:0">
-        <img src="./thumbs/terminal-thumb.png" width="1200" height="720" decoding="async"
+        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Meridian Terminal</b><em>gated, light and dark</em></div>
+        <div class="shot">
+          <img src="./thumbs/terminal-thumb.png" width="1200" height="720" decoding="async"
           alt="Meridian Terminal: candlestick chart with volume, order book, depth curve, tape and watchlist" />
-        <figcaption><b>Meridian Terminal</b><span>ten chart types, no chart library</span></figcaption>
+          <figcaption>ten chart types, no chart library</figcaption>
+        </div>
       </figure>
       <figure class="slide" style="margin:0">
-        <img src="./thumbs/atlas-dark.png" width="1200" height="720" loading="lazy" decoding="async"
+        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Atlas console</b><em>gated, light and dark</em></div>
+        <div class="shot">
+          <img src="./thumbs/atlas-dark.png" width="1200" height="720" loading="lazy" decoding="async"
           alt="Atlas revenue console: hero revenue figure, weekly bars, retention and churn" />
-        <figcaption><b>Atlas console</b><span>one number leads the page</span></figcaption>
+          <figcaption>one number leads the page</figcaption>
+        </div>
       </figure>
       <figure class="slide" style="margin:0">
-        <img src="./thumbs/tpl-banking.png" width="1200" height="760" loading="lazy" decoding="async"
+        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Harbor Bank</b><em>gated, light and dark</em></div>
+        <div class="shot">
+          <img src="./thumbs/tpl-banking.png" width="1200" height="760" loading="lazy" decoding="async"
           alt="Retail banking: balances, transaction ledger, spending breakdown" />
-        <figcaption><b>Harbor Bank</b><span>ledger, spending, a transfer that traps focus</span></figcaption>
+          <figcaption>ledger, spending, a transfer that traps focus</figcaption>
+        </div>
       </figure>
       <figure class="slide" style="margin:0">
-        <img src="./thumbs/tpl-emr.png" width="1200" height="760" loading="lazy" decoding="async"
+        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Meridian Health</b><em>gated, light and dark</em></div>
+        <div class="shot">
+          <img src="./thumbs/tpl-emr.png" width="1200" height="760" loading="lazy" decoding="async"
           alt="Patient chart: allergy banner, vitals with trends, labs against reference ranges" />
-        <figcaption><b>Meridian Health</b><span>the allergy banner comes first</span></figcaption>
+          <figcaption>the allergy banner comes first</figcaption>
+        </div>
       </figure>
     </div>
   </div>
