@@ -11,6 +11,8 @@ built the output, and whether they could see the kit's internals while doing it.
 | 2026-08-25 | `notification-center` | In-session (contaminated) | **14/14**; 11/13 first | 5/5 by hand | Same 4.24:1 pair again, this time on the unread row |
 | 2026-08-25 | `first-run-empty` | **BLIND** subagent, scaffolded project | **14/14** | 5/5 by hand | Found the component-tier dark bug and the external-CSS blind spot |
 | 2026-08-25 | `billing-settings` | **BLIND** subagent, scaffolded project | **14/14** | 6/6 by hand | Found the missing scrim token, the colours-only theme, and the intent gate's vocabulary |
+| 2026-09-15 | `data-density` | **BLIND** subagent, scaffolded project | **14/14** first submission | 5/5 by hand | First blind run on this brief. Clean first pass; keyboard sort verified to actually reorder |
+| 2026-09-15 | `notification-center` | **BLIND** subagent, scaffolded project | **14/14** first submission | 5/5 by hand | First blind run on this brief. Needed a `5xl` type step the seeded scale lacked |
 
 ## 2026-08-25 — billing-settings
 
@@ -207,3 +209,55 @@ That last row is the real lesson of this critique. The kit *had* most of these r
 in `taste/design-taste.md`, and both blind agents built entire screens without ever
 opening that file - because nothing pointed there until someone asked for a review.
 A rule that only loads during a review is a rule that arrives after the work.
+
+
+## 2026-09-15 — two blind runs, the briefs that had never had one
+
+Until today the four briefs had six runs between them and only **two** were
+blind, both on 2026-08-25 and both on the same two briefs. `data-density` and
+`notification-center` had only ever been built inside the session that wrote the
+kit, which is the weaker claim. They have a blind run each now.
+
+**What the agents were given.** The project path, the instruction to write one
+file, and the brief's own text: the description, the Constraints, and the
+Requirements retitled "Acceptance criteria". They were **not** given the "Known
+traps" section. Naming the traps is the coaching the protocol rules out - it
+would test whether an agent can follow a checklist, not whether the kit carries
+its own rules. Recorded here because the protocol asks for provenance, and "what
+exactly did it see" is the part that is easy to fudge.
+
+**Both scored 14/14 on first submission**, scored by this runner rather than
+taken from the agents' own reports. One of them claimed "18/18" from a list it
+assembled itself; the runner has 14 gates, and 14/14 is the number that means
+something.
+
+**The five hand-checked requirements, verified here rather than accepted:**
+
+| `data-density` | Evidence |
+|---|---|
+| `aria-sort` on real buttons | 6 sortable headers, every control a `<button>`, none a div |
+| Sorting works from the keyboard | Focus the header button, press Enter: `aria-sort` flips to `ascending` **and** the first row changes from ORD-24188 to ORD-24142. A declared state that also moves the data |
+| Non-colour selection cue | Checkbox per row plus the row treatment |
+| Long values truncate on purpose | 16 cells carry `text-overflow: ellipsis` with a `title`; longest cell 92 characters |
+| Density is deliberate | 4 distinct padding values across cells, not one repeated |
+
+| `notification-center` | Evidence |
+|---|---|
+| Nothing lost under reduced motion | All 9 rows present and opaque with motion emulated off |
+| Type without colour | The words MENTION / BILLING / COMMENT / SYSTEM, each with an icon |
+| Relative plus absolute time | "12 minutes ago" with `title="September 15, 2026 at 4:13 PM"` and a machine `datetime` |
+| Mark-all-read is affirmative | `btn--primary`, not a danger variant |
+| Survives a long body | Longest row measured 349 characters, wrapping cleanly |
+
+**What the runs say about the kit.** Neither agent needed a correction, which is
+a different result from the 2026-08-25 pair - those found real bugs in the kit on
+their first submission. Two clean passes are weaker evidence than one failure
+that exposed something, and they are recorded as such: they show the rules
+transfer, not that the kit is finished.
+
+**One gap they did expose.** The `notification-center` agent had to add a
+`font.size.5xl` token to its scaffolded project, because the seeded scale stopped
+at 2.25rem and could not satisfy the kit's own "display type is at least 2.5x the
+body" rule. A new project cannot follow that rule with the scale it is given.
+That is a defect in `templates/product-design/design-tokens.json`, found by an
+agent that had never seen this repo.

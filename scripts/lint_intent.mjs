@@ -61,8 +61,15 @@ const COLLECT = () => {
   /* `cancel subscription`, `close account`, `unsubscribe` are destructive in every
      product that has them; a blind eval run shipped a Cancel flow this gate scored
      as "0 intent-bearing controls". Bare `cancel` stays out: it is the dismiss
-     button on every dialog in the world. */
-  const DESTRUCTIVE = /\b(delete|remove|revoke|destroy|discard|erase|deactivate|terminate|wipe|unpublish|uninstall|drop|unsubscribe|cancel\s+(subscription|plan|account|membership)|close\s+account|leave\s+(team|workspace|organisation|organization))\b/i;
+     button on every dialog in the world.
+
+     The noun list grew again on 2026-09-15, from a second blind run: an orders
+     table shipped a per-row "Cancel order" with a confirm dialog, and the gate
+     measured NOTHING on it - `cancel` was only destructive in front of the four
+     billing words. Cancelling a customer's order is destructive in exactly the
+     way cancelling their plan is; what makes `cancel` ambiguous is the bare
+     verb, not the domain object after it. */
+  const DESTRUCTIVE = /\b(delete|remove|revoke|destroy|discard|erase|deactivate|terminate|wipe|unpublish|uninstall|drop|unsubscribe|cancel\s+(subscription|plan|account|membership|order|booking|reservation|shipment|invoice|payment|transfer|request|job|build|deployment|run)|close\s+account|leave\s+(team|workspace|organisation|organization))\b/i;
   const AFFIRMATIVE = /\b(save|confirm|continue|submit|publish|apply|create|send)\b/i;
 
   // Resolve theme tokens to real rgb by probing, so we compare like with like.

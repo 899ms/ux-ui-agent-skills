@@ -3,7 +3,7 @@
 import { forwardRef, type ButtonHTMLAttributes } from "react";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "destructive";
   loading?: boolean;
   selected?: boolean;
 };
@@ -46,4 +46,8 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
   background: transparent; color: var(--color-text-primary);
   box-shadow: inset 0 0 0 1px var(--color-border-strong);
 }
+.ds-btn[data-variant="destructive"] {
+  background: var(--color-action-destructive); color: var(--color-text-on-action);
+}
+.ds-btn[data-variant="destructive"]:hover { background: var(--color-action-destructive-hover); }
 */

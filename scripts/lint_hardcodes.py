@@ -52,7 +52,12 @@ def iter_files(paths, exts):
         pp = Path(p)
         if pp.is_dir():
             for f in pp.rglob("*"):
-                if f.suffix in exts and "node_modules" not in f.parts:
+                # A DIRECTORY can end in .css too. It used to be offered as a
+                # candidate and then swallowed by the read guard; now that an
+                # unreadable candidate fails the run, it has to be excluded here
+                # instead. A file that vanishes between this walk and the read
+                # still surfaces as a read error, which is correct.
+                if f.suffix in exts and "node_modules" not in f.parts and not f.is_dir():
                     yield f
         elif pp.is_file() and pp.suffix in exts:
             yield pp
@@ -181,10 +186,15 @@ def main(argv):
         print(f"ERROR: no lintable file(s) under {', '.join(args)}")
         return 1
     violations = 0
+    unreadable = []
     for f in files:
         try:
             text = f.read_text()
-        except (UnicodeDecodeError, OSError):
+        except (UnicodeDecodeError, OSError) as err:
+            # Swallowing this counted the file as scanned and let the run exit 0
+            # having never opened it - the same shape as the missing-path guard
+            # above, which already says scanning nothing must not read as clean.
+            unreadable.append((f, err))
             continue
         in_allow = False
         markup = f.suffix.lower() in {".html", ".htm", ".vue", ".svelte", ".astro"}
@@ -225,7 +235,13 @@ def main(argv):
                 print(f"{f}:{n}: hardcoded {kind} '{val}' — use a token")
                 violations += 1
 
-    print(f"\nScanned {len(files)} file(s).")
+    print(f"\nScanned {len(files) - len(unreadable)} of {len(files)} candidate file(s).")
+    for f, err in unreadable:
+        print(f"ERROR: could not read {f}: {err}", file=sys.stderr)
+    if unreadable:
+        print(f"FAIL: {len(unreadable)} file(s) could not be read, so this run "
+              f"cannot report clean. {violations} hardcoded value(s) in the rest.")
+        return 1
     if violations:
         print(f"FAIL: {violations} hardcoded value(s). Map each to a token, "
               f"or add a '{ALLOW}' comment for a justified exception.")
