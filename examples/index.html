@@ -90,12 +90,42 @@
   }
   @media (prefers-reduced-motion:reduce){.marquee{overflow-x:auto}}
 
-  /* ---------- sticky scroll gallery ---------- */
-  .stage{position:relative}
-  .sticky{position:sticky;inset-block-start:0;block-size:100svh;display:grid;align-items:center;overflow:hidden}
-  @media (max-width:60rem){.sticky{position:static;block-size:auto;padding-block:var(--space-10)}}
-  .rail{display:flex;gap:var(--space-6);padding-inline:var(--space-6);will-change:transform}
-  @media (max-width:60rem){.rail{flex-direction:column;padding-inline:var(--space-4)}}
+  /* ---------- before / after ---------- */
+  .compare{padding-block:var(--space-20);border-block-start:1px solid var(--lin-hairline)}
+  .compare p{color:var(--lin-ink-2);max-inline-size:62ch;margin-block-start:var(--space-4)}
+  .compare code{font-family:var(--font-mono);font-size:var(--text-sm);color:var(--acc)}
+  /* Two identical frames stacked; the top one is clipped to --x. Without the
+     script --x stays at 50%, so both halves are visible and nothing is lost. */
+  .cmp{position:relative;margin-block-start:var(--space-8);border-radius:var(--radius-lg);
+    overflow:hidden;border:1px solid var(--lin-hairline);background:var(--lin-panel);
+    box-shadow:0 50px 100px -40px rgba(0,0,0,.9)} /* ds-allow-hardcode: elevation ramp for a near-black canvas */
+  .cmp img{display:block;inline-size:100%;block-size:auto}
+  .cmpTop{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+  .cmpEdge{position:absolute;inset-block:0;inset-inline-start:var(--x);inline-size:var(--border-width-medium);
+    background:var(--acc);translate:-1px 0;pointer-events:none}
+  .cmpTag{position:absolute;inset-block-start:var(--space-4);padding:var(--space-1) var(--space-3);
+    border-radius:var(--radius-pill);background:var(--lin-canvas);color:var(--lin-ink-2);
+    font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
+    pointer-events:none}
+  .cmpTagA{inset-inline-start:var(--space-4)} .cmpTagB{inset-inline-end:var(--space-4)}
+  @media (max-width:40rem){.cmpTag{display:none}}
+  /* The range IS the handle: draggable with a pointer, and operable with the
+     arrow keys, which a bare div with a mousedown listener never is. */
+  .cmpRange{position:absolute;inset:0;inline-size:100%;block-size:100%;margin:0;
+    appearance:none;background:transparent;cursor:ew-resize}
+  .cmpRange::-webkit-slider-thumb{appearance:none;inline-size:var(--space-10);block-size:var(--space-10);
+    border-radius:var(--radius-full);background:var(--acc-fill);border:var(--border-width-medium) solid var(--lin-canvas);
+    box-shadow:0 4px 16px rgba(0,0,0,.6)} /* ds-allow-hardcode: handle lift on a near-black canvas */
+  .cmpRange::-moz-range-thumb{inline-size:var(--space-10);block-size:var(--space-10);
+    border-radius:var(--radius-full);background:var(--acc-fill);border:var(--border-width-medium) solid var(--lin-canvas)}
+  .cmpRange:focus-visible{outline:var(--ring-w) solid var(--acc);outline-offset:var(--space-1)}
+  .cmpList{list-style:none;margin:var(--space-8) 0 0;padding:0;display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:var(--space-6)}
+  .cmpList li{min-inline-size:0;padding-inline-start:var(--space-4);
+    border-inline-start:var(--border-width-medium) solid var(--lin-hairline)}
+  .cmpList b{display:block;font-family:var(--font-mono);font-size:var(--text-lg);color:var(--acc)}
+  .cmpList span{display:block;font-size:var(--text-sm);color:var(--lin-ink-3);
+    margin-block-start:var(--space-2);overflow-wrap:anywhere}
   .slide{flex:0 0 min(62rem,86vw);border-radius:var(--radius-lg);overflow:hidden;
     border:1px solid var(--lin-hairline-soft);background:var(--lin-panel);
     box-shadow:0 50px 100px -40px rgba(0,0,0,.9)} /* ds-allow-hardcode: elevation ramp for a near-black canvas */
@@ -245,42 +275,33 @@
 <div class="marquee" aria-hidden="true"><p>agentic · airbnb · airtable · ant · apple · application · arc · artistic · atelier zero · bento · binance · bmw · bold · brutalism · bugatti · cafe · cal · canva · claude · clay · claymorphism · clean · clickhouse · cohere · coinbase · colorful · composio · contemporary · corporate · cosmic · creative · cursor · dashboard · default · discord · dithered · doodle · dramatic · duolingo · editorial · elegant · elevenlabs · energetic · enterprise · expo · expressive · fantasy · ferrari · figma · flat · framer · friendly · futuristic · github · glassmorphism · gradient · hashicorp · huggingface · ibm · intercom · kami · kraken · lamborghini · levels · linear app · lingo · lovable · luxury · mastercard · material · meta · minimal · minimax · mintlify · miro · mistral ai · modern · mongodb · mono · neobrutalism · neon · neumorphism · nike · notion · nvidia · ollama · openai · opencode ai · pacman · paper · perspective · pinterest · playstation · posthog · premium · professional · publication · raycast · refined · renault · replicate · resend · retro · revolut · runwayml · sanity · sentry · shadcn · shopify · simple · skeumorphism · sleek · spacex · spacious · spotify · starbucks · storytelling · stripe · supabase · superhuman · tesla · tetris · theverge · together ai · uber · vercel · vibrant · vintage · vodafone · voltagent · warm editorial · warp · webflow · wired · wise · x ai · xiaohongshu · zapier · agentic · airbnb · airtable · ant · apple · application · arc · artistic · atelier zero · bento · binance · bmw · bold · brutalism · bugatti · cafe · cal · canva · claude · clay · claymorphism · clean · clickhouse · cohere · coinbase · colorful · composio · contemporary · corporate · cosmic · creative · cursor · dashboard · default · discord · dithered · doodle · dramatic · duolingo · editorial · elegant · elevenlabs · energetic · enterprise · expo · expressive · fantasy · ferrari · figma · flat · framer · friendly · futuristic · github · glassmorphism · gradient · hashicorp · huggingface · ibm · intercom · kami · kraken · lamborghini · levels · linear app · lingo · lovable · luxury · mastercard · material · meta · minimal · minimax · mintlify · miro · mistral ai · modern · mongodb · mono · neobrutalism · neon · neumorphism · nike · notion · nvidia · ollama · openai · opencode ai · pacman · paper · perspective · pinterest · playstation · posthog · premium · professional · publication · raycast · refined · renault · replicate · resend · retro · revolut · runwayml · sanity · sentry · shadcn · shopify · simple · skeumorphism · sleek · spacex · spacious · spotify · starbucks · storytelling · stripe · supabase · superhuman · tesla · tetris · theverge · together ai · uber · vercel · vibrant · vintage · vodafone · voltagent · warm editorial · warp · webflow · wired · wise · x ai · xiaohongshu · zapier</p></div>
 <p class="sr-only">The kit ships 138 named design systems, each as a full written specification.</p>
 
-<section class="stage" id="stage" aria-label="Screens the kit produces">
-  <div class="sticky">
-    <div class="rail" id="rail">
-      <figure class="slide" style="margin:0">
-        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Meridian Terminal</b><em>gated, light and dark</em></div>
-        <div class="shot">
-          <img src="./thumbs/terminal-thumb.png" width="1200" height="720" decoding="async"
-          alt="Meridian Terminal: candlestick chart with volume, order book, depth curve, tape and watchlist" />
-          <figcaption>ten chart types, no chart library</figcaption>
-        </div>
-      </figure>
-      <figure class="slide" style="margin:0">
-        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Atlas console</b><em>gated, light and dark</em></div>
-        <div class="shot">
-          <img src="./thumbs/atlas-dark.png" width="1200" height="720" loading="lazy" decoding="async"
-          alt="Atlas revenue console: hero revenue figure, weekly bars, retention and churn" />
-          <figcaption>one number leads the page</figcaption>
-        </div>
-      </figure>
-      <figure class="slide" style="margin:0">
-        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Harbor Bank</b><em>gated, light and dark</em></div>
-        <div class="shot">
-          <img src="./thumbs/tpl-banking.png" width="1200" height="760" loading="lazy" decoding="async"
-          alt="Retail banking: balances, transaction ledger, spending breakdown" />
-          <figcaption>ledger, spending, a transfer that traps focus</figcaption>
-        </div>
-      </figure>
-      <figure class="slide" style="margin:0">
-        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Meridian Health</b><em>gated, light and dark</em></div>
-        <div class="shot">
-          <img src="./thumbs/tpl-emr.png" width="1200" height="760" loading="lazy" decoding="async"
-          alt="Patient chart: allergy banner, vitals with trends, labs against reference ranges" />
-          <figcaption>the allergy banner comes first</figcaption>
-        </div>
-      </figure>
+<section class="compare" aria-labelledby="cmpTitle">
+  <div class="wrap">
+    <p class="kicker rise">The difference is not an opinion</p>
+    <h2 class="rise" id="cmpTitle">Drag it.</h2>
+    <p class="rise">Left is the same dashboard written the way a model writes it when
+      nothing stops it. Right is the reference app in this repo. Both are real files
+      you can open; the left one is <code>tests/fixtures/bad/slop-screen.html</code>,
+      and it fails nine of the gates.</p>
+
+    <div class="cmp rise" style="--x:50%">
+      <img class="cmpBase" src="./thumbs/compare-kit.png" width="1280" height="820" loading="lazy" decoding="async"
+        alt="The same dashboard built to the kit's rules: one hero revenue figure leading, three smaller stats, a settings panel and a red Delete account action" />
+      <img class="cmpTop" src="./thumbs/compare-slop.png" width="1280" height="820" loading="lazy" decoding="async"
+        alt="A generated-looking dashboard: purple gradient header with emoji, four identical stat cards, grey low-contrast labels and a blue Delete Account button" />
+      <span class="cmpEdge" aria-hidden="true"></span>
+      <span class="cmpTag cmpTagA" aria-hidden="true">Statistical defaults</span>
+      <span class="cmpTag cmpTagB" aria-hidden="true">Built to the rules</span>
+      <label class="sr-only" for="cmpRange">Reveal more of the default output or more of the kit output</label>
+      <input class="cmpRange" id="cmpRange" type="range" min="0" max="100" value="50" step="1" />
     </div>
+
+    <ul class="cmpList rise">
+      <li><b>1.00:1</b><span>white heading on a gradient, nothing measurable behind it</span></li>
+      <li><b>15.3&#215;16</b><span>icon button, under the 24&#215;24 floor</span></li>
+      <li><b>+820px</b><span>overflow at a 280px viewport</span></li>
+      <li><b>1.7&#215;</b><span>largest heading over body: bold text, not a display scale</span></li>
+    </ul>
   </div>
 </section>
 
@@ -439,23 +460,14 @@
     }), { threshold: .6 });
     document.querySelectorAll('[data-count]').forEach(el => nio.observe(el));
 
-    /* the gallery rail moves sideways while the stage is pinned */
-    const stage = document.getElementById('stage'), rail = document.getElementById('rail');
-    const wide = matchMedia('(min-width: 60rem)');
-    const setHeight = () => {
-      stage.style.blockSize = wide.matches
-        ? `${Math.max(rail.scrollWidth - innerWidth + innerHeight, innerHeight)}px` : '';
-    };
-    const onScroll = () => {
-      if (!wide.matches) { rail.style.transform = ''; return; }
-      const r = stage.getBoundingClientRect();
-      const span = stage.offsetHeight - innerHeight;
-      const p = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
-      rail.style.transform = `translate3d(${-p * (rail.scrollWidth - innerWidth + 48)}px,0,0)`;
-    };
-    addEventListener('resize', () => { setHeight(); onScroll(); }, { passive: true });
-    addEventListener('scroll', onScroll, { passive: true });
-    setHeight(); onScroll();
+    /* before/after: the range drives a custom property, nothing else */
+    const cmpRange = document.getElementById('cmpRange');
+    if (cmpRange) {
+      const cmp = cmpRange.closest('.cmp');
+      const paint = () => cmp.style.setProperty('--x', cmpRange.value + '%');
+      cmpRange.addEventListener('input', paint);
+      paint();
+    }
 
     /* a restrained 3D tilt: rotation only, no scale, capped at 6 degrees */
     document.querySelectorAll('.tilt').forEach((c) => {

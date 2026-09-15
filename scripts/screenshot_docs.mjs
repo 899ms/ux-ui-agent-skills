@@ -81,6 +81,11 @@ const THUMBS = [
   ['examples/templates/trial.html',    'tpl-trial.png',       'light', [1200, 760]],
   ['examples/templates/training.html', 'tpl-training.png',    'dark',  [1200, 760]],
   ['examples/templates/weather.html',  'tpl-weather.png',     'dark',  [1200, 760]],
+  // The before/after pair on the front door. Same viewport, same theme, no
+  // fullPage: a comparison slider is a lie if the two halves are not the same
+  // frame, and these two were 1280x1140 against 1280x1500.
+  ['tests/fixtures/bad/slop-screen.html', 'compare-slop.png', 'light', [1280, 820]],
+  ['examples/sample-app/preview.html',    'compare-kit.png',  'light', [1280, 820]],
 ];
 const THUMB_DIR = join(ROOT, 'examples', 'thumbs');
 
