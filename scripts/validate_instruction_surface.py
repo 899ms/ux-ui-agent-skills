@@ -27,7 +27,24 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+KIT = Path(__file__).resolve().parent.parent
+
+def _root():
+    """Where to look. Defaults to the repo this script lives in.
+
+    `--root <dir>` points the gate at a copy instead, which is the only way to
+    prove it still REJECTS a broken one: hardwired to its own repo, a gate can
+    only ever be shown passing, and a gate that has never said no is a claim,
+    not a check.
+    """
+    argv = sys.argv[1:]
+    if "--root" in argv:
+        i = argv.index("--root")
+        if i + 1 < len(argv):
+            return Path(argv[i + 1]).resolve()
+    return KIT
+
+ROOT = _root()
 BRIEF = ROOT / "CLAUDE.md"
 RULES = ROOT / ".claude" / "rules"
 MAX_LINES = 320

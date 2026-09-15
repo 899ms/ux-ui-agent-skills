@@ -24,7 +24,24 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+KIT = Path(__file__).resolve().parent.parent
+
+def _root():
+    """Where to look. Defaults to the repo this script lives in.
+
+    `--root <dir>` points the gate at a copy instead, which is the only way to
+    prove it still REJECTS a broken one: hardwired to its own repo, a gate can
+    only ever be shown passing, and a gate that has never said no is a claim,
+    not a check.
+    """
+    argv = sys.argv[1:]
+    if "--root" in argv:
+        i = argv.index("--root")
+        if i + 1 < len(argv):
+            return Path(argv[i + 1]).resolve()
+    return KIT
+
+ROOT = _root()
 TPL = ROOT / "templates" / "product-design"
 ALIAS = re.compile(r"\{([^}]+)\}")
 
@@ -124,7 +141,7 @@ def check_rules():
             issues.append(f"rules: CLAUDE.md points at {m}, which does not exist")
     for rule in sorted((TPL / ".claude" / "rules").glob("*.md")):
         for script in re.findall(r"scripts/([a-z_]+\.(?:mjs|py))", rule.read_text(encoding="utf-8")):
-            if not (ROOT / "scripts" / script).exists():
+            if not (KIT / "scripts" / script).exists():   # the kit ships the script, not the copy under test
                 issues.append(f"rules: {rule.name} points at scripts/{script}, which does not exist")
     return issues
 

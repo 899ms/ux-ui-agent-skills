@@ -52,11 +52,12 @@ cover this directory, CI would go red for the wrong reason.
 Not everything is coverable, and pretending otherwise is the failure mode this
 directory exists to prevent.
 
-- **Five gates are hardwired to the repo root** and ignore argv, so they cannot
-  be pointed at a fixture: `validate_component_spec.py`,
-  `validate_instruction_surface.py`, `validate_template.py`, `design_systems.py`,
-  and `accuracy_report.mjs`. Making them testable means giving the first three a
-  `--root` flag. Not done.
+- **`design_systems.py` and `accuracy_report.mjs` are still hardwired to the repo
+  root.** The other three - `validate_component_spec.py`,
+  `validate_instruction_surface.py`, `validate_template.py` - take `--root` now,
+  and `meta/root-scoped.test.mjs` uses it to show each one refusing a broken
+  copy. `accuracy_report.mjs` is the runner itself, so pointing it elsewhere is a
+  different feature; `design_systems.py` reads a library that only exists here.
 - **`build_tokens.mjs` is a generator first.** Without `--check` it still writes
   what it can and exits 0, because that is what a generator should do; the gate
   runs it with `--check`, which turns a dropped reference into a failure. `unit/`
