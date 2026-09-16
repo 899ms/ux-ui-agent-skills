@@ -1,6 +1,6 @@
 # tests/ — the layer that checks the gates
 
-The kit's 43 objective gates all point at `examples/` that already pass. That
+The kit's 44 objective gates all point at `examples/` that already pass. That
 proves a gate says yes to good work. It never proves the gate can still say no.
 
 This directory supplies the other half: input built to be wrong, and the
@@ -52,6 +52,13 @@ cover this directory, CI would go red for the wrong reason.
 Not everything is coverable, and pretending otherwise is the failure mode this
 directory exists to prevent.
 
+- **`validate_theme_refs.py` scanned `examples/golden` and nothing else** until
+  2026-09-15, so a `var()` pointing at a token no theme defines survived
+  everywhere else. That is how `--space-7` reached the front door: the whole
+  `gap` shorthand was invalid, the stat labels collided, and every gate still
+  reported green. It takes repeated `--theme` files now, counts a custom
+  property defined inside the scanned file as defined, and the gate runs it
+  across the templates, harnesses, demos and the front door.
 - **`design_systems.py` and `accuracy_report.mjs` are still hardwired to the repo
   root.** The other three - `validate_component_spec.py`,
   `validate_instruction_surface.py`, `validate_template.py` - take `--root` now,

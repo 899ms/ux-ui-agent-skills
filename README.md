@@ -28,7 +28,7 @@ A comprehensive kit of structured instructions, design tokens, runnable skills, 
 [![npm downloads](https://img.shields.io/npm/dt/ux-ui-agent-skills?style=flat-square&logo=npm&logoColor=white&color=cb3837)](https://www.npmjs.com/package/ux-ui-agent-skills)
 ![Tokens](https://img.shields.io/badge/Design_Tokens-DTCG-fbbf24?style=flat-square)
 ![Skills](https://img.shields.io/badge/runnable_skills-19-14b8a6?style=flat-square)
-![Gates](https://img.shields.io/badge/objective_gates-43-16a34a?style=flat-square)
+![Gates](https://img.shields.io/badge/objective_gates-44-16a34a?style=flat-square)
 [![Live demo](https://img.shields.io/badge/live_demo-open-0ea5e9?style=flat-square)](https://plugin87.github.io/ux-ui-agent-skills/)
 ![Design Systems](https://img.shields.io/badge/design_systems-138-f97316?style=flat-square)
 ![Frameworks](https://img.shields.io/badge/frameworks-any-8b5cf6?style=flat-square)
@@ -48,7 +48,7 @@ A comprehensive kit of structured instructions, design tokens, runnable skills, 
 
 
 Not a mockup. These are screenshots of the files in `examples/`, taken by
-`node scripts/screenshot_docs.mjs` from the same HTML the 43 gates measure — so
+`node scripts/screenshot_docs.mjs` from the same HTML the 44 gates measure — so
 what you see below is what the gate run passed, in both themes.
 
 **Click through them yourself: [plugin87.github.io/ux-ui-agent-skills](https://plugin87.github.io/ux-ui-agent-skills/)**
@@ -223,7 +223,7 @@ as project context.
 "Design a notification component with all states and accessibility"
 "Build the billing settings screen, one shared theme, light and dark"
 "/grill-me"      interrogate the brief before anything is built
-"/gate"          run all 43 checks and report the real N/N
+"/gate"          run all 44 checks and report the real N/N
 "/critique"      hand the result to a critic that argues for rejection
 ```
 
@@ -285,10 +285,10 @@ Working on the kit itself, or want it vendored? [Clone and copy](docs/GUIDE.md#i
 ## Proving It, and Admitting What Cannot Be Proven
 
 
-The kit ships **43 objective gates** behind one command:
+The kit ships **44 objective gates** behind one command:
 
 ```bash
-node scripts/accuracy_report.mjs     # 43/43 or it fails — no partial credit
+node scripts/accuracy_report.mjs     # 44/44 or it fails — no partial credit
 ```
 
 **31 of them open a real browser, so they need one installed.** Playwright is not
@@ -311,10 +311,10 @@ at 280/320/414, target size, keyboard operability, reduced motion (including
 content that only an animation reveals), silent text clipping, token-by-intent,
 and zero emoji anywhere in the output or the instruction surface.
 
-**What that number covers, stated exactly.** 31 of the 43 checks open a real
+**What that number covers, stated exactly.** 31 of the 44 checks open a real
 browser, so what they measure is **rendered HTML**: the 23 component harnesses,
 the twenty industry screens, the reference app, the live demo, the starter
-template. The other 12 read files — token JSON and alias resolution, contrast
+template. The other 13 read files — token JSON and alias resolution, contrast
 math on the token source, component specs, hardcoded values, theme references,
 emoji, the instruction surface, and destructive-intent declarations in framework
 source.
@@ -369,7 +369,7 @@ caught two real defects the 34-check gate had missed. See `evals/README.md`.
 ## Contributing
 
 
-Two commands are the whole bar: `node scripts/accuracy_report.mjs` (43/43, no
+Two commands are the whole bar: `node scripts/accuracy_report.mjs` (44/44, no
 partial credit) and `npm run test:gates` (every gate must still reject its
 broken fixture). Paste the real output in the pull request rather than
 describing it.

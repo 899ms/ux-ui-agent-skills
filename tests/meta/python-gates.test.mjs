@@ -54,11 +54,11 @@ test('validate_contrast accepts a theme that passes light AND dark', () => {
 test('validate_theme_refs rejects a var() the theme never defines', () => {
   rejects(
     py('validate_theme_refs.py', [F('bad/theme-refs/theme.css'), F('bad/theme-refs')]),
-    /--color-text-tertiary.*NOT defined/);
+    /--color-text-tertiary.*resolves to nothing/);
 });
 
 test('validate_theme_refs accepts a theme that defines everything referenced', () => {
   accepts(
     py('validate_theme_refs.py', [F('good/theme-refs/theme.css'), F('good/theme-refs')]),
-    /every component token reference resolves/i);
+    /every token reference resolves/i);
 });

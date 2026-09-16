@@ -47,15 +47,18 @@ test('a missing browser fails loudly under DS_REQUIRE_BROWSER, and only skips wi
   }
 });
 
-test('validate_theme_refs needs TWO paths — one silently scans examples/golden instead', () => {
-  // The trap: `validate_theme_refs.py <dir>` ignores the argument and validates
-  // the repo's own golden example, so a broken fixture reports OK.
+test('validate_theme_refs refuses one path rather than silently scanning golden', () => {
+  // It used to ignore a single argument and validate the repo's own golden
+  // example instead, so a broken fixture handed to it reported OK. Now a lone
+  // path is an error, because guessing which half the caller meant is how a
+  // gate ends up measuring something nobody asked about.
   const oneArg = py('validate_theme_refs.py', [F('bad/theme-refs')]);
-  assert.equal(oneArg.status, 0);
-  assert.doesNotMatch(oneArg.out, /theme-refs/, 'a single argument should be reaching the fixture but does not');
+  assert.equal(oneArg.status, 1, oneArg.out);
+  assert.match(oneArg.out, /at least one --theme/);
 
   const twoArgs = py('validate_theme_refs.py', [F('bad/theme-refs/theme.css'), F('bad/theme-refs')]);
   assert.equal(twoArgs.status, 1);
+  assert.match(twoArgs.out, /resolves to nothing/);
 });
 
 test('a path that does not exist never exits 0', () => {
