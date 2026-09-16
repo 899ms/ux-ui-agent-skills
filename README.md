@@ -113,17 +113,18 @@ left is `tests/fixtures/bad/slop-screen.html`; here is what the gates say about 
 | Gate | Verdict on the left-hand page |
 |---|---|
 | REAL-render WCAG | `x <h1> "Analytics Dashboard" 1.00:1 (need 3)` - white text on a gradient has no measurable background |
+| State-aware WCAG | `x default "Save Changes" 1.00:1 (need 4.5) [rgb(255,255,255) on rgb(255,255,255)]` - 6 states below AA |
 | Target size (2.5.8) | `x button.icon-btn is 15.3x16 (min 24x24)` |
 | Responsive | `x @280px overflow +820px (widest: div.card)` |
 | axe-core | `SERIOUS target-size` |
 | Slop tells | HIGH: hardcoded indigo-purple gradient, single radius, one flat shadow, `#000` on `#fff` |
 | Taste audit | HIGH: biggest heading 24px vs 14px body = 1.7x, not a display scale |
 | Token by intent | `x "Delete Account" is destructive but filled with rgb(99, 102, 241) (hue 239deg, not a danger colour)` |
-| No emoji | `x line 88: emoji/pictograph` |
+| No emoji | `x slop-screen.html:55: emoji/pictograph` - a chart glyph in the `<h1>` |
 | No hardcoded values | `FAIL: 63 hardcoded value(s)` |
 
-Eight gates, nine findings, none of them a matter of taste. The right-hand page
-passes all 41.
+Ten gates reject it, none of them on a matter of taste. The right-hand page
+passes all 44.
 
 The last row is there because building this comparison broke a gate open.
 `lint_intent` originally read that blue Delete Account as fine: it resolved

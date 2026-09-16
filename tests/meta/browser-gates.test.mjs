@@ -11,7 +11,8 @@
  * not measured anything.
  */
 import { test, before } from 'node:test';
-import { gate, rejects, accepts, F } from '../helpers/run.mjs';
+import assert from 'node:assert/strict';
+import { gate, rejects, accepts, py, F } from '../helpers/run.mjs';
 import { requireBrowser } from '../helpers/preflight.mjs';
 
 before(requireBrowser);
@@ -133,6 +134,8 @@ test('the slop screen in the README is rejected by every gate the README claims'
   const SLOP = F('bad/slop-screen.html');
 
   rejects(gate('measure_render.mjs', [SLOP]), /1\.00:1|need/);
+  rejects(gate('measure_render.mjs', ['--dark', SLOP]), /need/);
+  rejects(gate('verify_states.mjs', [SLOP]), /"Save Changes" 1\.00:1/);
   rejects(gate('verify_target_size.mjs', [SLOP]), /min 24x24/);
   rejects(gate('verify_responsive.mjs', [SLOP]), /@280px overflow/);
   rejects(gate('slop_tells.mjs', ['--strict', SLOP]), /HIGH/);
@@ -142,4 +145,34 @@ test('the slop screen in the README is rejected by every gate the README claims'
   // tokens, so a page with none passed. A saturated non-danger fill on a
   // destructive label is now wrong-intent whether or not a theme exists.
   rejects(gate('lint_intent.mjs', [SLOP]), /Delete Account.*not a danger colour/s);
+});
+
+test('exactly ten gates reject the slop screen - the number both front doors print', () => {
+  // examples/index.html says "ten of the gates reject it" and the README prints
+  // a ten-row table of their verdicts. Counting it here is the only thing that
+  // keeps both true: a gate that stops catching this page, or a new gate that
+  // starts, moves the number and fails this test.
+  //
+  // Measure it on a quiet machine. Under a concurrent full gate run, five of the
+  // gates that pass here time out instead and the count reads 13 - that is
+  // contention, not detection, which is why a null status is an error below and
+  // never counted as a rejection.
+  const SLOP = F('bad/slop-screen.html');
+  const ONE_FILE = [
+    'measure_render.mjs', 'verify_states.mjs', 'axe_audit.mjs', 'verify_keyboard.mjs',
+    'verify_target_size.mjs', 'verify_overflow.mjs', 'verify_responsive.mjs',
+    'verify_reduced_motion.mjs', 'lint_intent.mjs', 'verify_interactive.mjs',
+    'verify_rtl.mjs',
+  ];
+  // status must be exactly 1 - the gates' "I found something" code. A crash or
+  // a timeout gives null, which would otherwise inflate the count silently.
+  const verdicts = [
+    ...ONE_FILE.map(g => [g, gate(g, [SLOP]).status]),
+    ...['slop_tells.mjs', 'taste_audit.mjs'].map(g => [g, gate(g, ['--strict', SLOP]).status]),
+    ...['check_no_emoji.py', 'lint_hardcodes.py'].map(g => [g, py(g, [SLOP]).status]),
+  ];
+  const broken = verdicts.filter(([, st]) => st !== 0 && st !== 1);
+  assert.equal(broken.length, 0, `gate(s) neither passed nor reported a finding: ${broken.map(([g, st]) => `${g}=${st}`).join(', ')}`);
+  const rejecting = verdicts.filter(([, st]) => st === 1).map(([g]) => g);
+  assert.equal(rejecting.length, 10, `gates rejecting the slop screen: ${rejecting.join(', ')}`);
 });

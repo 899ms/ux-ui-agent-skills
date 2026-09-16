@@ -150,7 +150,10 @@
   .shot figcaption{position:absolute;inset-inline:0;inset-block-end:0;
     padding:var(--space-8) var(--space-5) var(--space-4);font-size:var(--text-sm);
     color:var(--lin-ink);font-weight:500;
-    background:linear-gradient(to bottom,transparent,var(--lin-panel) 88%)}
+    /* The text sits at 49-74% of this box (measured), so the fade has to be
+       finished above it - at 88% every word sat over a see-through scrim and
+       the table rows behind the hero screenshot read straight through it. */
+    background:linear-gradient(to bottom,transparent,var(--lin-panel) 45%)}
   @media (max-width:30rem){.shot figcaption{padding-block-start:var(--space-6)}}
 
   /* ---------- numbers ---------- */
@@ -282,7 +285,7 @@
     <p class="rise">Left is the same dashboard written the way a model writes it when
       nothing stops it. Right is the reference app in this repo. Both are real files
       you can open; the left one is <code>tests/fixtures/bad/slop-screen.html</code>,
-      and it fails nine of the gates.</p>
+      and ten of the gates reject it.</p>
 
     <div class="cmp rise" style="--x:50%">
       <img class="cmpBase" src="./thumbs/compare-kit.png" width="1280" height="500" loading="lazy" decoding="async"
