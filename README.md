@@ -52,7 +52,7 @@ Not a mockup. These are screenshots of the files in `examples/`, taken by
 what you see below is what the gate run passed, in both themes.
 
 **Click through them yourself: [plugin87.github.io/ux-ui-agent-skills](https://plugin87.github.io/ux-ui-agent-skills/)**
- — 50 live pages: twenty whole-product screens, every component harness, both
+ — 49 live pages: twenty whole-product screens, every component harness, both
 reference screens, with a theme toggle. No install, no clone.
 
 <img src=".github/images/dashboard-light.png" alt="Atlas revenue console in light theme: sidebar navigation, a hero net-recurring-revenue figure at 2.48 million with a weekly bar chart, retention and churn cards, a donut of revenue by plan, an account ranking, regional sparklines, a sortable renewals table and an activity feed" />
@@ -356,7 +356,7 @@ caught two real defects the 34-check gate had missed. See `evals/README.md`.
 
 | Where | What is in it |
 |---|---|
-| **[Live demo](https://plugin87.github.io/ux-ui-agent-skills/)** | 50 rendered pages: twenty industry screens, every component harness, both reference screens, a theme toggle |
+| **[Live demo](https://plugin87.github.io/ux-ui-agent-skills/)** | 49 rendered pages: twenty industry screens, every component harness, both reference screens, a theme toggle |
 | [docs/GUIDE.md](docs/GUIDE.md) | Using it as a plugin (inventory, management, token cost), how the skills compose, the repo map, token architecture, frameworks, interop, a11y standards, starting a new product project |
 | [CHANGELOG.md](CHANGELOG.md) | Every release, newest first |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | The bar for a pull request, and how to add a gate that can still say no |

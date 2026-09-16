@@ -82,10 +82,13 @@ const THUMBS = [
   ['examples/templates/training.html', 'tpl-training.png',    'dark',  [1200, 760]],
   ['examples/templates/weather.html',  'tpl-weather.png',     'dark',  [1200, 760]],
   // The before/after pair on the front door. Same viewport, same theme, no
-  // fullPage: a comparison slider is a lie if the two halves are not the same
-  // frame, and these two were 1280x1140 against 1280x1500.
-  ['tests/fixtures/bad/slop-screen.html', 'compare-slop.png', 'light', [1280, 820]],
-  ['examples/sample-app/preview.html',    'compare-kit.png',  'light', [1280, 820]],
+  // fullPage. A comparison slider is a lie if the two halves are not the same
+  // frame, and these two were 1280x1140 against 1280x1500. Matching them is only
+  // half of it: at 1280 the slop fixture's content ends at 516px and the
+  // reference app's at 889, so a frame tall enough for both left the slop side a
+  // third blank white. 500 is the tallest frame where BOTH reach the bottom edge.
+  ['tests/fixtures/bad/slop-screen.html', 'compare-slop.png', 'light', [1280, 500]],
+  ['examples/sample-app/preview.html',    'compare-kit.png',  'light', [1280, 500]],
 ];
 const THUMB_DIR = join(ROOT, 'examples', 'thumbs');
 
